@@ -137,6 +137,11 @@
     width: 56px; height: 56px; border-radius: 28px; background: var(--blue); color: #fff;
     font-size: 28px; border: none; box-shadow: 0 6px 18px rgba(0,113,227,0.35); z-index: 20;
   }
+  .fab-left {
+    position: fixed; left: 20px; bottom: calc(88px + env(safe-area-inset-bottom));
+    width: 56px; height: 56px; border-radius: 28px; background: var(--card); color: var(--text);
+    font-size: 24px; border: 1px solid var(--border); box-shadow: 0 4px 14px rgba(0,0,0,0.1); z-index: 20;
+  }
   .overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 30;
     display: flex; align-items: flex-end;
@@ -315,9 +320,9 @@
         <p class="hint-text" id="game-message-sub"></p>
         <button class="btn pear" style="max-width:200px; margin-top:12px;" onclick="startGame()">Nochmal spielen</button>
       </div>
-      <div class="game-partner-scores" id="game-partner-scores"></div>
     </div>
   </section>
+  <button class="fab-left hidden" id="leaderboard-fab" onclick="openLeaderboard()">🏆</button>
 
   <!-- SETTINGS TAB -->
   <section id="tab-settings" class="hidden">
@@ -407,6 +412,15 @@
   </div>
 </div>
 
+<!-- Highscore-Liste Sheet -->
+<div class="overlay hidden" id="leaderboard-overlay" onclick="if(event.target===this) closeLeaderboard()">
+  <div class="sheet">
+    <button class="close-x" onclick="closeLeaderboard()">✕</button>
+    <h2>🏆 Bestenliste</h2>
+    <div id="leaderboard-list"></div>
+  </div>
+</div>
+
 <script>
 const PRESETS = {
   gmail:   { imap: "imap.gmail.com", imap_port: 993, smtp: "smtp.gmail.com", smtp_port: 587 },
@@ -433,6 +447,7 @@ async function checkAuthAndInit() {
   const res = await fetch("/api/auth/status");
   const data = await res.json();
   if (data.logged_in) {
+    currentUsername = data.username;
     showApp();
   } else {
     setAuthMode("login");
@@ -451,7 +466,7 @@ async function doRegister() {
     body: JSON.stringify({ username, password })
   });
   const data = await res.json();
-  if (data.ok) { showApp(); } else { errEl.textContent = data.error || "Fehler bei der Registrierung"; }
+  if (data.ok) { currentUsername = data.username; showApp(); } else { errEl.textContent = data.error || "Fehler bei der Registrierung"; }
 }
 
 async function doLogin() {
@@ -464,7 +479,7 @@ async function doLogin() {
     body: JSON.stringify({ username, password })
   });
   const data = await res.json();
-  if (data.ok) { showApp(); } else { errEl.textContent = data.error || "Anmeldung fehlgeschlagen"; }
+  if (data.ok) { currentUsername = data.username; showApp(); } else { errEl.textContent = data.error || "Anmeldung fehlgeschlagen"; }
 }
 
 async function doLogout() {
@@ -494,6 +509,7 @@ function switchTab(name) {
   document.getElementById("tab-game").classList.toggle("hidden", name !== "game");
   document.getElementById("tab-settings").classList.toggle("hidden", name !== "settings");
   document.getElementById("add-event-fab").classList.toggle("hidden", name !== "calendar");
+  document.getElementById("leaderboard-fab").classList.toggle("hidden", name !== "game");
   if (name === "mail") loadMailList();
   if (name === "calendar") { loadCalendarInfo(); loadEvents(); }
   if (name === "game") initGameTab();
@@ -804,9 +820,12 @@ const GRID_SIZE = 16;
 let gameCells = [];
 let gameLevel = 0;
 let gameLitIndices = new Set();
-let gameRoundTimer = null;
+let gameChainTimer = null;
+let gameChainStarted = false;
 let gameRunning = false;
 let gameHighScore = 0;
+let gamePartnerScores = [];
+let currentUsername = null;
 
 function buildGameGrid() {
   const gridEl = document.getElementById("game-grid");
@@ -833,16 +852,28 @@ async function loadGameHighscore() {
   if (res.status === 401) return;
   const data = await res.json();
   gameHighScore = data.high_score || 0;
+  gamePartnerScores = data.partners || [];
   document.getElementById("game-highscore").textContent = gameHighScore;
+}
 
-  const partnersEl = document.getElementById("game-partner-scores");
-  if (data.partners && data.partners.length > 0) {
-    partnersEl.innerHTML = data.partners.map(p =>
-      `<div class="partner-score-row"><span class="name">${escapeHtml(p.username)}</span><span>${p.high_score}</span></div>`
-    ).join("");
-  } else {
-    partnersEl.innerHTML = "";
-  }
+// ---------- Highscore-Popup ----------
+function openLeaderboard() {
+  const listEl = document.getElementById("leaderboard-list");
+  const all = [{ username: currentUsername || "Du", high_score: gameHighScore, self: true }]
+    .concat(gamePartnerScores.map(p => ({ username: p.username, high_score: p.high_score, self: false })));
+  all.sort((a, b) => b.high_score - a.high_score);
+
+  listEl.innerHTML = all.map((p, i) => `
+    <div class="partner-score-row" style="${p.self ? 'font-weight:700; color:var(--text);' : ''}">
+      <span class="name">${i + 1}. ${escapeHtml(p.username)}${p.self ? ' (Du)' : ''}</span>
+      <span>${p.high_score}</span>
+    </div>`).join("");
+
+  document.getElementById("leaderboard-overlay").classList.remove("hidden");
+}
+
+function closeLeaderboard() {
+  document.getElementById("leaderboard-overlay").classList.add("hidden");
 }
 
 function startGame() {
@@ -862,18 +893,17 @@ function getLitCount(level) {
   return 1;
 }
 
-function roundDuration(level) {
-  const litCount = getLitCount(level);
-  // Langsamerer Zeitabfall als zuvor, höhere Untergrenze (500ms statt 260ms)
-  const base = Math.max(500, 1300 - level * 28);
-  // Pro zusätzlichem gleichzeitig leuchtendem Kreis gibt es mehr Zeit,
-  // damit es bei mehreren Kreisen weiterhin machbar bleibt
-  const bonus = (litCount - 1) * 550;
-  return base + bonus;
+// Zeit, die nach dem ERSTEN Treffer für jeden weiteren noch leuchtenden Kreis
+// zur Verfügung steht (grosszügig bemessen, da man nicht mehrere Kreise
+// gleichzeitig drücken kann -- sinkt langsam mit dem Level, hat aber eine
+// grosszügige Untergrenze).
+function chainTimePerCircle(level) {
+  return Math.max(650, 1000 - level * 8);
 }
 
 function playRound() {
-  clearTimeout(gameRoundTimer);
+  clearTimeout(gameChainTimer);
+  gameChainStarted = false;
   gameCells.forEach(c => c.className = "game-cell");
   gameLitIndices = new Set();
 
@@ -883,9 +913,9 @@ function playRound() {
   }
   gameLitIndices.forEach(i => gameCells[i].classList.add("lit"));
 
-  gameRoundTimer = setTimeout(() => {
-    if (gameLitIndices.size > 0) gameOver(false);
-  }, roundDuration(gameLevel));
+  // WICHTIG: Es läuft noch KEIN Timer! Der Spieler hat beliebig lange Zeit,
+  // um überhaupt den ersten leuchtenden Kreis zu finden und zu drücken.
+  // Der Timer für die restlichen Kreise startet erst danach (siehe onCellTap).
 }
 
 function onCellTap(index) {
@@ -895,11 +925,22 @@ function onCellTap(index) {
     gameCells[index].classList.remove("lit");
     gameCells[index].classList.add("correct");
     gameLitIndices.delete(index);
+
     if (gameLitIndices.size === 0) {
-      clearTimeout(gameRoundTimer);
+      // Runde komplett -- naechstes Level
+      clearTimeout(gameChainTimer);
       gameLevel++;
       document.getElementById("game-level").textContent = gameLevel;
       setTimeout(playRound, 260);
+    } else if (!gameChainStarted) {
+      // Erster Treffer bei mehreren Kreisen: Jetzt erst startet der Timer
+      // fuer die restlichen, noch leuchtenden Kreise.
+      gameChainStarted = true;
+      const remaining = gameLitIndices.size;
+      const duration = remaining * chainTimePerCircle(gameLevel);
+      gameChainTimer = setTimeout(() => {
+        if (gameLitIndices.size > 0) gameOver(false);
+      }, duration);
     }
   } else {
     gameCells[index].classList.add("wrong");
@@ -909,7 +950,7 @@ function onCellTap(index) {
 
 function gameOver(wrongTap) {
   gameRunning = false;
-  clearTimeout(gameRoundTimer);
+  clearTimeout(gameChainTimer);
 
   const titleEl = document.getElementById("game-message-title");
   const subEl = document.getElementById("game-message-sub");
