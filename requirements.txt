@@ -1,0 +1,3 @@
+# Diese App verwendet ausschließlich die Python-Standardbibliothek.
+# Diese Datei existiert nur, damit Hosting-Plattformen (z.B. Render)
+# das Projekt zuverlässig als Python-Anwendung erkennen.
