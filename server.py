@@ -26,6 +26,8 @@ import smtplib
 import email
 import ssl
 import threading
+import hashlib
+import secrets
 from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 from email.header import decode_header, make_header
@@ -80,6 +82,16 @@ def init_db():
         all_day INTEGER,
         created_at TEXT
     )""")
+    c.execute("""CREATE TABLE IF NOT EXISTS auth_user (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        username TEXT,
+        salt TEXT,
+        password_hash TEXT
+    )""")
+    c.execute("""CREATE TABLE IF NOT EXISTS sessions (
+        token TEXT PRIMARY KEY,
+        created_at TEXT
+    )""")
     conn.commit()
 
     c.execute("SELECT id FROM calendars LIMIT 1")
@@ -97,6 +109,18 @@ def get_default_calendar():
     row = conn.execute("SELECT * FROM calendars LIMIT 1").fetchone()
     conn.close()
     return row
+
+
+def hash_password(password, salt_hex=None):
+    """Erzeugt einen sicheren Passwort-Hash mit PBKDF2 (nur Standardbibliothek)."""
+    salt = bytes.fromhex(salt_hex) if salt_hex else secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 200_000)
+    return salt.hex(), digest.hex()
+
+
+def verify_password(password, salt_hex, expected_hash_hex):
+    _, computed_hash = hash_password(password, salt_hex)
+    return secrets.compare_digest(computed_hash, expected_hash_hex)
 
 
 # ---------------------------------------------------------------------------
@@ -225,6 +249,44 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass  # ruhiger Server, keine Konsolen-Flut
 
+    def _get_session_token(self):
+        cookie_header = self.headers.get("Cookie", "")
+        for part in cookie_header.split(";"):
+            part = part.strip()
+            if part.startswith("session="):
+                return part[len("session="):]
+        return None
+
+    def _is_authenticated(self):
+        token = self._get_session_token()
+        if not token:
+            return False
+        conn = get_db()
+        row = conn.execute("SELECT token FROM sessions WHERE token = ?", (token,)).fetchone()
+        conn.close()
+        return row is not None
+
+    def _set_session_cookie(self, token):
+        self.send_header(
+            "Set-Cookie",
+            f"session={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000"
+        )
+
+    def _clear_session_cookie(self):
+        self.send_header("Set-Cookie", "session=; Path=/; HttpOnly; Max-Age=0")
+
+    def _send_json_with_cookie(self, obj, status=200, token=None, clear=False):
+        body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        if token:
+            self._set_session_cookie(token)
+        if clear:
+            self._clear_session_cookie()
+        self.end_headers()
+        self.wfile.write(body)
+
     # -------- Routing --------
 
     def do_GET(self):
@@ -233,6 +295,22 @@ class Handler(http.server.BaseHTTPRequestHandler):
         query = parse_qs(parsed.query)
 
         try:
+            # Öffentlich zugänglich: Auth-Status, ICS-Feed, Join-Seite, Frontend-Dateien
+            if path == "/api/auth/status":
+                return self.get_auth_status()
+            if path.startswith("/calendar/") and path.endswith(".ics"):
+                token = path[len("/calendar/"):-len(".ics")]
+                return self.get_ics_feed(token)
+            if path.startswith("/join/"):
+                token = path[len("/join/"):]
+                return self.get_join_page(token)
+            if not path.startswith("/api/"):
+                return self._serve_static_file(path)
+
+            # Ab hier: alle /api/*-Routen erfordern Login
+            if not self._is_authenticated():
+                return self._send_json({"error": "not_authenticated"}, 401)
+
             if path == "/api/account":
                 return self.get_account()
             if path == "/api/mail/list":
@@ -243,14 +321,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return self.get_calendar_info()
             if path == "/api/calendar/events":
                 return self.get_calendar_events(query)
-            if path.startswith("/calendar/") and path.endswith(".ics"):
-                token = path[len("/calendar/"):-len(".ics")]
-                return self.get_ics_feed(token)
-            if path.startswith("/join/"):
-                token = path[len("/join/"):]
-                return self.get_join_page(token)
-            # Statische Frontend-Dateien
-            return self._serve_static_file(path)
+            self._send_json({"error": "Unbekannter Endpunkt"}, 404)
         except Exception as e:
             self._send_json({"error": str(e)}, 500)
 
@@ -258,6 +329,18 @@ class Handler(http.server.BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            # Öffentlich zugänglich: Registrierung und Login selbst
+            if path == "/api/auth/register":
+                return self.post_auth_register()
+            if path == "/api/auth/login":
+                return self.post_auth_login()
+            if path == "/api/auth/logout":
+                return self.post_auth_logout()
+
+            # Ab hier: Login erforderlich
+            if not self._is_authenticated():
+                return self._send_json({"error": "not_authenticated"}, 401)
+
             if path == "/api/account":
                 return self.post_account()
             if path == "/api/mail/send":
@@ -272,6 +355,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if not self._is_authenticated():
+                return self._send_json({"error": "not_authenticated"}, 401)
             if path.startswith("/api/calendar/events/"):
                 event_id = path.split("/")[-1]
                 return self.put_calendar_event(event_id)
@@ -283,12 +368,84 @@ class Handler(http.server.BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if not self._is_authenticated():
+                return self._send_json({"error": "not_authenticated"}, 401)
             if path.startswith("/api/calendar/events/"):
                 event_id = path.split("/")[-1]
                 return self.delete_calendar_event(event_id)
             self._send_json({"error": "Unbekannter Endpunkt"}, 404)
         except Exception as e:
             self._send_json({"error": str(e)}, 500)
+
+    # -------- Login / Registrierung --------
+
+    def get_auth_status(self):
+        conn = get_db()
+        user = conn.execute("SELECT username FROM auth_user WHERE id = 1").fetchone()
+        conn.close()
+        registered = user is not None
+        logged_in = self._is_authenticated()
+        self._send_json({
+            "registered": registered,
+            "logged_in": logged_in,
+            "username": user["username"] if user else None,
+        })
+
+    def post_auth_register(self):
+        conn = get_db()
+        existing = conn.execute("SELECT id FROM auth_user WHERE id = 1").fetchone()
+        if existing:
+            conn.close()
+            return self._send_json({"error": "Es existiert bereits ein Konto. Bitte einloggen."}, 400)
+
+        data = self._read_json_body()
+        username = (data.get("username") or "").strip()
+        password = data.get("password") or ""
+        if not username or len(password) < 4:
+            conn.close()
+            return self._send_json({"error": "Benutzername und ein Passwort (mind. 4 Zeichen) erforderlich"}, 400)
+
+        salt_hex, hash_hex = hash_password(password)
+        with DB_LOCK:
+            conn.execute(
+                "INSERT INTO auth_user (id, username, salt, password_hash) VALUES (1, ?, ?, ?)",
+                (username, salt_hex, hash_hex)
+            )
+            token = secrets.token_hex(32)
+            conn.execute("INSERT INTO sessions (token, created_at) VALUES (?, ?)",
+                         (token, datetime.now(timezone.utc).isoformat()))
+            conn.commit()
+        conn.close()
+        self._send_json_with_cookie({"ok": True, "username": username}, token=token)
+
+    def post_auth_login(self):
+        data = self._read_json_body()
+        username = (data.get("username") or "").strip()
+        password = data.get("password") or ""
+
+        conn = get_db()
+        user = conn.execute("SELECT * FROM auth_user WHERE id = 1").fetchone()
+        if not user or user["username"] != username or not verify_password(password, user["salt"], user["password_hash"]):
+            conn.close()
+            return self._send_json({"error": "Benutzername oder Passwort falsch"}, 401)
+
+        token = secrets.token_hex(32)
+        with DB_LOCK:
+            conn.execute("INSERT INTO sessions (token, created_at) VALUES (?, ?)",
+                         (token, datetime.now(timezone.utc).isoformat()))
+            conn.commit()
+        conn.close()
+        self._send_json_with_cookie({"ok": True, "username": username}, token=token)
+
+    def post_auth_logout(self):
+        token = self._get_session_token()
+        if token:
+            with DB_LOCK:
+                conn = get_db()
+                conn.execute("DELETE FROM sessions WHERE token = ?", (token,))
+                conn.commit()
+                conn.close()
+        self._send_json_with_cookie({"ok": True}, clear=True)
 
     # -------- Konto / E-Mail-Zugangsdaten --------
 
