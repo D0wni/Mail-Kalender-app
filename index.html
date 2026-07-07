@@ -6,94 +6,86 @@
 <title>ALPKAAN's App</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Alpkaan">
 <link rel="manifest" href="/manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg:        #11131c;
-    --bg-elev:   #1a1d2b;
-    --bg-card:   #20233314;
-    --card:      #1e2130;
-    --card-line: #2c3046;
-    --gold:      #c9a25c;
-    --gold-soft: #c9a25c33;
-    --text:      #f3efe6;
-    --muted:     #9295ab;
-    --danger:    #ff6b6b;
-    --success:   #6fcf97;
+    --bg:        #f5f5f7;
+    --card:      #ffffff;
+    --border:    #e5e5ea;
+    --text:      #1d1d1f;
+    --muted:     #6e6e73;
+    --blue:      #0071e3;
+    --blue-soft: #0071e314;
+    --pear:      #5f9a44;
+    --pear-soft: #5f9a4416;
+    --danger:    #ff3b30;
+    --success:   #34c759;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
   body {
-    margin: 0; font-family: "Inter", -apple-system, sans-serif;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
     background: var(--bg); color: var(--text);
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+    -webkit-font-smoothing: antialiased;
   }
-  .display { font-family: "Fraunces", Georgia, serif; }
 
-  /* ---------- Logo / Monogramm ---------- */
-  .badge {
-    width: 76px; height: 76px; border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, #e7c583, var(--gold) 60%, #8a6a2f 100%);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 0 1px var(--gold-soft), 0 8px 24px rgba(201,162,92,0.25);
-    margin: 0 auto;
-  }
-  .badge span {
-    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 30px;
-    color: #1a1306; letter-spacing: 0.5px;
-  }
+  /* ---------- Birnen-Logo (statt Apfel) ---------- */
+  .pear-logo { display: block; }
+  .pear-logo .body { fill: url(#pearGradGlobal); }
+  .pear-logo .stem { stroke: #4a6b2a; stroke-width: 4.5; fill: none; stroke-linecap: round; }
+  .pear-logo .leaf { fill: #7cb342; }
+
+  .badge-lg { width: 84px; height: 100px; margin: 0 auto; }
+  .badge-sm { width: 30px; height: 36px; flex-shrink: 0; }
+
   .brand-title {
-    text-align: center; font-size: 26px; font-weight: 600; margin: 18px 0 2px;
-    letter-spacing: 0.2px;
+    text-align: center; font-size: 24px; font-weight: 700; margin: 16px 0 2px;
+    letter-spacing: -0.3px; color: var(--text);
   }
-  .brand-title .accent { color: var(--gold); }
-  .brand-sub {
-    text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 0;
-    letter-spacing: 0.3px;
-  }
+  .brand-title .thin { font-weight: 400; color: var(--muted); }
+  .brand-sub { text-align: center; color: var(--muted); font-size: 14.5px; margin-bottom: 0; }
 
   /* ---------- Login / Registrierung ---------- */
   #auth-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    padding: 24px;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
   }
   .auth-box { width: 100%; max-width: 380px; }
   .auth-card {
-    background: var(--card); border: 1px solid var(--card-line); border-radius: 20px;
-    padding: 28px 22px; margin-top: 28px;
+    background: var(--card); border-radius: 20px; padding: 26px 22px; margin-top: 26px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
   }
   .auth-toggle {
-    display: flex; margin-top: 22px; border: 1px solid var(--card-line); border-radius: 12px; overflow: hidden;
+    display: flex; margin-top: 22px; background: var(--bg); border-radius: 11px; padding: 3px;
   }
   .auth-toggle button {
-    flex: 1; padding: 10px; background: transparent; color: var(--muted); border: none;
-    font-family: inherit; font-size: 14px; font-weight: 600;
+    flex: 1; padding: 9px; background: transparent; color: var(--muted); border: none;
+    border-radius: 9px; font-family: inherit; font-size: 14px; font-weight: 600;
   }
-  .auth-toggle button.active { background: var(--gold-soft); color: var(--gold); }
-  .auth-error { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 8px; text-align: center; }
+  .auth-toggle button.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  .auth-error { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 10px; text-align: center; }
 
   /* ---------- Allgemeine Elemente ---------- */
   input, textarea, select {
-    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--card-line);
-    font-size: 15px; margin-bottom: 10px; font-family: inherit; background: var(--bg-elev); color: var(--text);
+    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+    font-size: 15px; margin-bottom: 10px; font-family: inherit; background: #fafafa; color: var(--text);
   }
-  input::placeholder { color: #5c5f70; }
-  input:focus, textarea:focus, select:focus { outline: 2px solid var(--gold-soft); border-color: var(--gold); }
-  label { font-size: 12.5px; color: var(--muted); display: block; margin-bottom: 4px; letter-spacing: 0.2px; }
+  input::placeholder { color: #9a9a9e; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); background: #fff; }
+  label { font-size: 12.5px; color: var(--muted); display: block; margin-bottom: 4px; font-weight: 500; }
   .btn {
-    display: inline-block; background: var(--gold); color: #1a1306; border: none;
-    padding: 13px 18px; border-radius: 12px; font-size: 15px; font-weight: 700;
+    display: inline-block; background: var(--blue); color: #fff; border: none;
+    padding: 13px 18px; border-radius: 12px; font-size: 15px; font-weight: 600;
     text-align: center; cursor: pointer; width: 100%; font-family: inherit;
   }
-  .btn.secondary { background: var(--bg-elev); color: var(--text); border: 1px solid var(--card-line); }
-  .btn.danger { background: var(--danger); color: #2a0e0e; }
+  .btn.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+  .btn.pear { background: var(--pear); }
+  .btn.danger { background: var(--danger); }
   .btn-row { display: flex; gap: 8px; margin-top: 10px; }
   .btn-row .btn { width: auto; flex: 1; }
 
@@ -101,61 +93,114 @@
   #app-shell { display: none; }
   header {
     position: sticky; top: 0; z-index: 10;
-    background: rgba(17,19,28,0.9); backdrop-filter: blur(10px);
-    padding: 14px 16px 10px; border-bottom: 1px solid var(--card-line);
+    background: rgba(245,245,247,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 12px 16px 10px; border-bottom: 1px solid var(--border);
   }
   .header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .header-row .mini-badge {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, #e7c583, var(--gold) 60%, #8a6a2f 100%);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .header-row .mini-badge span { font-family: "Fraunces", serif; font-weight: 600; font-size: 14px; color: #1a1306; }
-  header h1 { font-size: 17px; margin: 0; font-weight: 600; flex: 1; }
-  .logout-link { font-size: 13px; color: var(--muted); background: none; border: none; font-family: inherit; }
-  .tabs { display: flex; gap: 8px; }
+  header h1 { font-size: 16.5px; margin: 0; font-weight: 700; flex: 1; letter-spacing: -0.2px; }
+  .logout-link { font-size: 13px; color: var(--blue); background: none; border: none; font-family: inherit; font-weight: 500; }
+  .tabs { display: flex; gap: 3px; background: #e8e8ec; border-radius: 10px; padding: 3px; }
   .tab {
-    flex: 1; text-align: center; padding: 9px; border-radius: 10px;
-    background: var(--bg-elev); font-size: 13.5px; font-weight: 600; color: var(--muted);
-    border: 1px solid var(--card-line);
+    flex: 1; text-align: center; padding: 7px 4px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
   }
-  .tab.active { background: var(--gold-soft); color: var(--gold); border-color: var(--gold-soft); }
+  .tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
   main { padding: 12px 16px 90px; }
   .card {
-    background: var(--card); border: 1px solid var(--card-line); border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
   .card .subject { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
   .card .from { font-size: 13px; color: var(--muted); }
   .card .date { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .hidden { display: none !important; }
-  .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; }
+  .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14.5px; }
   .fab {
     position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom));
-    width: 56px; height: 56px; border-radius: 28px; background: var(--gold); color: #1a1306;
-    font-size: 28px; border: none; box-shadow: 0 6px 18px rgba(201,162,92,0.35); z-index: 20;
+    width: 56px; height: 56px; border-radius: 28px; background: var(--blue); color: #fff;
+    font-size: 28px; border: none; box-shadow: 0 6px 18px rgba(0,113,227,0.35); z-index: 20;
   }
   .overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 30;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 30;
     display: flex; align-items: flex-end;
   }
   .sheet {
-    background: var(--bg); width: 100%; border-radius: 18px 18px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
-    max-height: 88vh; overflow-y: auto; border-top: 1px solid var(--card-line);
+    background: var(--bg); width: 100%; border-radius: 20px 20px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+    max-height: 88vh; overflow-y: auto;
   }
-  .sheet h2 { margin-top: 0; font-size: 18px; font-family: "Fraunces", serif; font-weight: 600; }
+  .sheet h2 { margin-top: 0; font-size: 19px; font-weight: 700; letter-spacing: -0.2px; }
   .close-x { position: absolute; right: 16px; top: 14px; font-size: 22px; color: var(--muted); background:none; border:none; }
-  .share-box { background: var(--bg-elev); border: 1px solid var(--card-line); border-radius: 12px; padding: 12px; font-size: 13px; word-break: break-all; margin-top: 6px; color: var(--muted); }
+  .share-box { background: #fafafa; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 13px; word-break: break-all; margin-top: 6px; color: var(--muted); }
   .status { font-size: 13px; color: var(--muted); text-align: center; padding: 8px 0; }
-  .event-time { font-size: 13px; color: var(--gold); font-weight: 600; }
+  .event-time { font-size: 13px; font-weight: 600; }
+  .hint-text { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+  /* ---------- Spiel ---------- */
+  .game-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 6px; }
+  .game-stats { display: flex; justify-content: space-between; width: 100%; max-width: 340px; margin-bottom: 14px; }
+  .game-stat { text-align: center; }
+  .game-stat .num { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .game-stat .lbl { font-size: 12px; color: var(--muted); }
+  .game-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    width: 100%; max-width: 340px; aspect-ratio: 1;
+  }
+  .game-cell {
+    border-radius: 50%; background: #e5e5ea; border: none;
+    aspect-ratio: 1; transition: transform 0.08s ease, background 0.12s ease;
+  }
+  .game-cell:active { transform: scale(0.94); }
+  .game-cell.lit {
+    background: radial-gradient(circle at 35% 30%, #b7e08f, var(--pear) 70%);
+    box-shadow: 0 0 0 0 rgba(95,154,68,0.5);
+    animation: pulse-glow 0.5s ease-in-out infinite alternate;
+  }
+  .game-cell.correct { background: var(--success) !important; animation: none; }
+  .game-cell.wrong { background: var(--danger) !important; animation: none; }
+  @keyframes pulse-glow {
+    from { box-shadow: 0 0 0 0 rgba(95,154,68,0.45); }
+    to   { box-shadow: 0 0 16px 6px rgba(95,154,68,0.25); }
+  }
+  .game-overlay-msg {
+    text-align: center; margin-top: 22px; max-width: 320px;
+  }
+  .game-overlay-msg h2 { font-size: 22px; margin-bottom: 4px; }
+  .game-partner-scores { margin-top: 18px; width: 100%; max-width: 340px; }
+  .partner-score-row {
+    display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0;
+    border-bottom: 1px solid var(--border); color: var(--muted);
+  }
+  .partner-score-row span.name { color: var(--text); font-weight: 500; }
 </style>
 </head>
 <body>
 
+<!-- SVG-Gradient global definieren (wird von allen Birnen-Logos genutzt) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="pearGradGlobal" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#8fce5c"/>
+      <stop offset="100%" stop-color="#568233"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <!-- ================= LOGIN / REGISTRIERUNG ================= -->
 <div id="auth-screen">
   <div class="auth-box">
-    <div class="badge"><span>AK</span></div>
-    <div class="brand-title">ALPKAAN<span class="accent">'s</span> App</div>
+    <svg class="pear-logo badge-lg" viewBox="0 0 100 120">
+      <mask id="biteMaskLg">
+        <rect x="0" y="0" width="100" height="120" fill="white"/>
+        <circle cx="60" cy="37" r="13" fill="black"/>
+      </mask>
+      <g mask="url(#biteMaskLg)">
+        <ellipse class="body" cx="50" cy="80" rx="25" ry="30"/>
+        <ellipse class="body" cx="47" cy="44" rx="16" ry="18"/>
+      </g>
+      <path class="stem" d="M49 22 Q52 11 61 8"/>
+      <path class="leaf" d="M60 8 Q71 4 75 12 Q68 15 60 12 Z"/>
+    </svg>
+    <div class="brand-title">ALPKAAN<span class="thin">'s App</span></div>
     <div class="brand-sub">Mail &amp; Kalender, an einem Ort</div>
 
     <div class="auth-card">
@@ -189,13 +234,25 @@
 <div id="app-shell">
 <header>
   <div class="header-row">
-    <div class="mini-badge"><span>AK</span></div>
+    <svg class="pear-logo badge-sm" viewBox="0 0 100 120">
+      <mask id="biteMaskSm">
+        <rect x="0" y="0" width="100" height="120" fill="white"/>
+        <circle cx="60" cy="37" r="13" fill="black"/>
+      </mask>
+      <g mask="url(#biteMaskSm)">
+        <ellipse class="body" cx="50" cy="80" rx="25" ry="30"/>
+        <ellipse class="body" cx="47" cy="44" rx="16" ry="18"/>
+      </g>
+      <path class="stem" d="M49 22 Q52 11 61 8"/>
+      <path class="leaf" d="M60 8 Q71 4 75 12 Q68 15 60 12 Z"/>
+    </svg>
     <h1>ALPKAAN's App</h1>
     <button class="logout-link" onclick="doLogout()">Abmelden</button>
   </div>
   <div class="tabs">
     <div class="tab active" data-tab="mail">Mail</div>
     <div class="tab" data-tab="calendar">Kalender</div>
+    <div class="tab" data-tab="game">Spiel</div>
     <div class="tab" data-tab="settings">Konto</div>
   </div>
 </header>
@@ -211,10 +268,11 @@
   <!-- CALENDAR TAB -->
   <section id="tab-calendar" class="hidden">
     <div class="card" id="share-card">
-      <div style="font-weight:600; margin-bottom:6px;">Kalender teilen</div>
-      <div style="font-size:13px; color:var(--muted);">
-        Schick diesen Link z.B. deiner Frau. Ein Tipp genügt, und der Kalender
-        erscheint automatisch in ihrer iPhone-Kalender-App.
+      <div style="font-weight:700; margin-bottom:6px;">Deinen Kalender teilen</div>
+      <div class="hint-text">
+        <b>Im iPhone abonnieren</b> spiegelt deine Termine automatisch in die
+        native Kalender-App deiner Frau. <b>In der App verknüpfen</b> zeigt
+        eure Kalender zusätzlich gemeinsam in dieser App an.
       </div>
       <div class="share-box" id="join-link">wird geladen...</div>
       <div class="btn-row">
@@ -222,9 +280,39 @@
         <button class="btn secondary" onclick="shareLink()">Teilen...</button>
       </div>
     </div>
+
+    <div class="card" id="link-partner-card">
+      <div style="font-weight:700; margin-bottom:6px;">Partner-Kalender verknüpfen</div>
+      <div class="hint-text" style="margin-bottom:8px;">
+        Link von deiner Frau bekommen? Hier einfügen für die gemeinsame Ansicht in der App.
+      </div>
+      <input id="partner-link-input" placeholder="Link oder Code einfügen">
+      <button class="btn secondary" onclick="linkPartnerCalendar()">Verknüpfen</button>
+      <div id="link-partner-status" class="status"></div>
+      <div id="linked-calendars-list"></div>
+    </div>
+
+    <div id="calendar-legend" class="hidden" style="display:flex; gap:14px; padding: 4px 4px 10px; font-size:13px; color:var(--muted);"></div>
     <div id="events-list"></div>
   </section>
   <button class="fab hidden" id="add-event-fab" onclick="openEventSheet()">+</button>
+
+  <!-- SPIEL TAB -->
+  <section id="tab-game" class="hidden">
+    <div class="game-wrap">
+      <div class="game-stats">
+        <div class="game-stat"><div class="num" id="game-level">0</div><div class="lbl">Level</div></div>
+        <div class="game-stat"><div class="num" id="game-highscore">0</div><div class="lbl">Highscore</div></div>
+      </div>
+      <div class="game-grid" id="game-grid"></div>
+      <div id="game-message" class="game-overlay-msg hidden">
+        <h2 id="game-message-title"></h2>
+        <p class="hint-text" id="game-message-sub"></p>
+        <button class="btn pear" style="max-width:200px; margin-top:12px;" onclick="startGame()">Nochmal spielen</button>
+      </div>
+      <div class="game-partner-scores" id="game-partner-scores"></div>
+    </div>
+  </section>
 
   <!-- SETTINGS TAB -->
   <section id="tab-settings" class="hidden">
@@ -332,11 +420,10 @@ function setAuthMode(mode) {
 async function checkAuthAndInit() {
   const res = await fetch("/api/auth/status");
   const data = await res.json();
-  if (data.registered && !data.logged_in) setAuthMode("login");
-  if (!data.registered) setAuthMode("register");
   if (data.logged_in) {
     showApp();
   } else {
+    setAuthMode("login");
     document.getElementById("auth-screen").style.display = "flex";
     document.getElementById("app-shell").style.display = "none";
   }
@@ -392,10 +479,12 @@ function switchTab(name) {
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
   document.getElementById("tab-mail").classList.toggle("hidden", name !== "mail");
   document.getElementById("tab-calendar").classList.toggle("hidden", name !== "calendar");
+  document.getElementById("tab-game").classList.toggle("hidden", name !== "game");
   document.getElementById("tab-settings").classList.toggle("hidden", name !== "settings");
   document.getElementById("add-event-fab").classList.toggle("hidden", name !== "calendar");
   if (name === "mail") loadMailList();
   if (name === "calendar") { loadCalendarInfo(); loadEvents(); }
+  if (name === "game") initGameTab();
   if (name === "settings") loadAccount();
 }
 
@@ -537,6 +626,46 @@ async function loadCalendarInfo() {
   if (res.status === 401) return;
   calendarInfo = await res.json();
   document.getElementById("join-link").textContent = calendarInfo.join_link;
+
+  const listEl = document.getElementById("linked-calendars-list");
+  if (calendarInfo.linked_calendars && calendarInfo.linked_calendars.length > 0) {
+    listEl.innerHTML = "<div style='font-size:13px; color:var(--muted); margin-top:10px;'>Verknüpft mit: " +
+      calendarInfo.linked_calendars.map(c => escapeHtml(c.owner_username)).join(", ") + "</div>";
+  } else {
+    listEl.innerHTML = "";
+  }
+}
+
+function extractTokenFromInput(value) {
+  value = value.trim();
+  if (value.includes("/join/")) {
+    return value.split("/join/")[1].split(/[?#]/)[0];
+  }
+  if (value.includes("/calendar/") && value.includes(".ics")) {
+    return value.split("/calendar/")[1].split(".ics")[0];
+  }
+  return value;
+}
+
+async function linkPartnerCalendar() {
+  const input = document.getElementById("partner-link-input");
+  const status = document.getElementById("link-partner-status");
+  const token = extractTokenFromInput(input.value);
+  if (!token) { status.textContent = "Bitte einen Link oder Code einfügen."; return; }
+  status.textContent = "Verknüpfe...";
+  const res = await fetch("/api/calendar/link", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ token })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    status.textContent = `✓ Verknüpft mit ${data.owner_username}`;
+    input.value = "";
+    loadCalendarInfo();
+    loadEvents();
+  } else {
+    status.textContent = data.error || "Fehler beim Verknüpfen";
+  }
 }
 
 function copyShareLink() {
@@ -557,27 +686,46 @@ function shareLink() {
 
 async function loadEvents() {
   const listEl = document.getElementById("events-list");
+  const legendEl = document.getElementById("calendar-legend");
   listEl.innerHTML = `<div class="status">Lade Termine...</div>`;
   const res = await fetch("/api/calendar/events");
   if (res.status === 401) return;
   const data = await res.json();
   listEl.innerHTML = "";
+
   if (!data.events || data.events.length === 0) {
+    legendEl.classList.add("hidden");
     listEl.innerHTML = `<div class="empty-state">Noch keine Termine. Tippe auf + um einen hinzuzufügen.</div>`;
     return;
   }
+
+  const owners = [...new Set(data.events.map(e => e.owner_username))];
+  if (owners.length > 1) {
+    legendEl.classList.remove("hidden");
+    legendEl.innerHTML = data.events
+      .filter((e, i, arr) => arr.findIndex(x => x.owner_username === e.owner_username) === i)
+      .map(e => `<span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;
+        background:${e.is_own ? 'var(--pear)' : 'var(--blue)'};margin-right:5px;"></span>${escapeHtml(e.owner_username)}</span>`)
+      .join("");
+  } else {
+    legendEl.classList.add("hidden");
+  }
+
   data.events.forEach(ev => {
     const card = document.createElement("div");
     card.className = "card";
+    card.style.borderLeft = `3px solid ${ev.is_own ? 'var(--pear)' : 'var(--blue)'}`;
     const start = new Date(ev.start_utc);
     const end = new Date(ev.end_utc);
     const timeStr = ev.all_day
       ? start.toLocaleDateString("de-DE")
       : `${start.toLocaleDateString("de-DE")} ${start.toLocaleTimeString("de-DE",{hour:'2-digit',minute:'2-digit'})} – ${end.toLocaleTimeString("de-DE",{hour:'2-digit',minute:'2-digit'})}`;
-    card.innerHTML = `<div class="event-time">${timeStr}</div>
+    card.innerHTML = `<div class="event-time" style="color:${ev.is_own ? 'var(--pear)' : 'var(--blue)'}">${timeStr}${owners.length > 1 ? ' · ' + escapeHtml(ev.owner_username) : ''}</div>
                        <div class="subject">${escapeHtml(ev.title)}</div>
                        ${ev.location ? `<div class="from">📍 ${escapeHtml(ev.location)}</div>` : ""}`;
-    card.onclick = () => { if (confirm("Diesen Termin löschen?")) deleteEvent(ev.id); };
+    if (ev.is_own) {
+      card.onclick = () => { if (confirm("Diesen Termin löschen?")) deleteEvent(ev.id); };
+    }
     listEl.appendChild(card);
   });
 }
@@ -637,6 +785,124 @@ function escapeHtml(s) {
   const div = document.createElement("div");
   div.textContent = s || "";
   return div.innerHTML;
+}
+
+// ---------- Spiel: 4x4 Reaktionsspiel ----------
+const GRID_SIZE = 16;
+let gameCells = [];
+let gameLevel = 0;
+let gameLitIndices = new Set();
+let gameRoundTimer = null;
+let gameRunning = false;
+let gameHighScore = 0;
+
+function buildGameGrid() {
+  const gridEl = document.getElementById("game-grid");
+  gridEl.innerHTML = "";
+  gameCells = [];
+  for (let i = 0; i < GRID_SIZE; i++) {
+    const btn = document.createElement("button");
+    btn.className = "game-cell";
+    btn.addEventListener("click", () => onCellTap(i));
+    gridEl.appendChild(btn);
+    gameCells.push(btn);
+  }
+}
+
+async function initGameTab() {
+  if (gameCells.length === 0) buildGameGrid();
+  document.getElementById("game-message").classList.add("hidden");
+  await loadGameHighscore();
+  if (!gameRunning) startGame();
+}
+
+async function loadGameHighscore() {
+  const res = await fetch("/api/game/highscore");
+  if (res.status === 401) return;
+  const data = await res.json();
+  gameHighScore = data.high_score || 0;
+  document.getElementById("game-highscore").textContent = gameHighScore;
+
+  const partnersEl = document.getElementById("game-partner-scores");
+  if (data.partners && data.partners.length > 0) {
+    partnersEl.innerHTML = data.partners.map(p =>
+      `<div class="partner-score-row"><span class="name">${escapeHtml(p.username)}</span><span>${p.high_score}</span></div>`
+    ).join("");
+  } else {
+    partnersEl.innerHTML = "";
+  }
+}
+
+function startGame() {
+  gameRunning = true;
+  gameLevel = 0;
+  document.getElementById("game-level").textContent = gameLevel;
+  document.getElementById("game-message").classList.add("hidden");
+  gameCells.forEach(c => c.className = "game-cell");
+  playRound();
+}
+
+function roundDuration(level) {
+  // Wird mit steigendem Level schneller, Untergrenze bei 260ms
+  return Math.max(260, 1100 - level * 45);
+}
+
+function playRound() {
+  clearTimeout(gameRoundTimer);
+  gameCells.forEach(c => c.className = "game-cell");
+  gameLitIndices = new Set();
+
+  // Kreative Steigerung: ab Level 5 (und jedem 5. danach) leuchten 2 Kreise gleichzeitig
+  const litCount = (gameLevel > 0 && gameLevel % 5 === 0) ? 2 : 1;
+  while (gameLitIndices.size < litCount) {
+    gameLitIndices.add(Math.floor(Math.random() * GRID_SIZE));
+  }
+  gameLitIndices.forEach(i => gameCells[i].classList.add("lit"));
+
+  gameRoundTimer = setTimeout(() => {
+    if (gameLitIndices.size > 0) gameOver(false);
+  }, roundDuration(gameLevel));
+}
+
+function onCellTap(index) {
+  if (!gameRunning) return;
+
+  if (gameLitIndices.has(index)) {
+    gameCells[index].classList.remove("lit");
+    gameCells[index].classList.add("correct");
+    gameLitIndices.delete(index);
+    if (gameLitIndices.size === 0) {
+      clearTimeout(gameRoundTimer);
+      gameLevel++;
+      document.getElementById("game-level").textContent = gameLevel;
+      setTimeout(playRound, 260);
+    }
+  } else {
+    gameCells[index].classList.add("wrong");
+    gameOver(true);
+  }
+}
+
+function gameOver(wrongTap) {
+  gameRunning = false;
+  clearTimeout(gameRoundTimer);
+
+  const titleEl = document.getElementById("game-message-title");
+  const subEl = document.getElementById("game-message-sub");
+  titleEl.textContent = "Game Over!";
+  subEl.textContent = wrongTap
+    ? `Daneben getippt. Erreichtes Level: ${gameLevel}`
+    : `Zu langsam. Erreichtes Level: ${gameLevel}`;
+  document.getElementById("game-message").classList.remove("hidden");
+
+  if (gameLevel > gameHighScore) {
+    gameHighScore = gameLevel;
+    document.getElementById("game-highscore").textContent = gameHighScore;
+    fetch("/api/game/highscore", {
+      method: "POST", headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ score: gameLevel })
+    });
+  }
 }
 
 // ---------- Start ----------
