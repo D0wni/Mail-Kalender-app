@@ -33,7 +33,12 @@ from urllib.parse import urlparse, parse_qs, unquote
 from datetime import datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.join(BASE_DIR, "static")
+# Statische Dateien liegen jetzt direkt im Hauptverzeichnis (keine Unterordner
+# nötig -- praktisch, wenn man Dateien manuell über die GitHub-Weboberfläche
+# hochlädt). Nur diese konkreten Dateien dürfen ausgeliefert werden, damit
+# server.py oder die Datenbank niemals versehentlich ausgeliefert werden.
+STATIC_DIR = BASE_DIR
+ALLOWED_STATIC_FILES = {"index.html", "manifest.json", "sw.js"}
 DB_FILE = os.path.join(BASE_DIR, "app.db")
 PORT = int(os.environ.get("PORT", 8000))
 
@@ -191,10 +196,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if rel_path == "" or rel_path == "/":
             rel_path = "index.html"
         rel_path = rel_path.lstrip("/")
-        full_path = os.path.normpath(os.path.join(STATIC_DIR, rel_path))
-        if not full_path.startswith(STATIC_DIR):
-            self._send_text("Verboten", 403)
+        if rel_path not in ALLOWED_STATIC_FILES:
+            self._send_text("Nicht gefunden", 404)
             return
+        full_path = os.path.normpath(os.path.join(STATIC_DIR, rel_path))
         if not os.path.isfile(full_path):
             self._send_text("Nicht gefunden", 404)
             return

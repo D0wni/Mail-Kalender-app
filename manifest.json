@@ -1,0 +1,9 @@
+{
+  "name": "Mail & Kalender",
+  "short_name": "Mail&Kal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#0a84ff",
+  "icons": []
+}
