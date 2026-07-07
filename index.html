@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mail &amp; Kalender</title>
+
+<!-- iOS "Zum Home-Bildschirm hinzufügen" Unterstützung -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mail&Kal">
+<link rel="manifest" href="/manifest.json">
+
+<style>
+  :root {
+    --blue: #0a84ff;
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --text: #1c1c1e;
+    --muted: #8e8e93;
+    --danger: #ff3b30;
+    --green: #34c759;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(242,242,247,0.9); backdrop-filter: blur(10px);
+    padding: 14px 16px 10px; border-bottom: 1px solid #e0e0e5;
+  }
+  header h1 { font-size: 20px; margin: 0 0 10px; }
+  .tabs { display: flex; gap: 8px; }
+  .tab {
+    flex: 1; text-align: center; padding: 8px; border-radius: 10px;
+    background: #e5e5ea; font-size: 14px; font-weight: 600; color: var(--muted);
+  }
+  .tab.active { background: var(--blue); color: white; }
+  main { padding: 12px 16px 90px; }
+  .card {
+    background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .card .subject { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+  .card .from { font-size: 13px; color: var(--muted); }
+  .card .date { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .btn {
+    display: inline-block; background: var(--blue); color: white; border: none;
+    padding: 12px 18px; border-radius: 12px; font-size: 15px; font-weight: 600;
+    text-align: center; cursor: pointer; width: 100%;
+  }
+  .btn.secondary { background: #e5e5ea; color: var(--text); }
+  .btn.danger { background: var(--danger); }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-row .btn { width: auto; flex: 1; }
+  input, textarea {
+    width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #d1d1d6;
+    font-size: 15px; margin-bottom: 8px; font-family: inherit; background: white;
+  }
+  label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 2px; }
+  textarea { min-height: 120px; resize: vertical; }
+  .hidden { display: none !important; }
+  .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; }
+  .fab {
+    position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom));
+    width: 56px; height: 56px; border-radius: 28px; background: var(--blue); color: white;
+    font-size: 28px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 20;
+  }
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 30;
+    display: flex; align-items: flex-end;
+  }
+  .sheet {
+    background: var(--bg); width: 100%; border-radius: 18px 18px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+    max-height: 88vh; overflow-y: auto;
+  }
+  .sheet h2 { margin-top: 0; font-size: 18px; }
+  .close-x { position: absolute; right: 16px; top: 14px; font-size: 22px; color: var(--muted); background:none; border:none; }
+  .share-box { background: #eaf4ff; border-radius: 12px; padding: 12px; font-size: 13px; word-break: break-all; margin-top: 6px; }
+  .status { font-size: 13px; color: var(--muted); text-align: center; padding: 8px 0; }
+  .event-time { font-size: 13px; color: var(--blue); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="app-title">📬 Mail &amp; Kalender</h1>
+  <div class="tabs">
+    <div class="tab active" data-tab="mail">Mail</div>
+    <div class="tab" data-tab="calendar">Kalender</div>
+    <div class="tab" data-tab="settings">Konto</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- MAIL TAB -->
+  <section id="tab-mail">
+    <div id="mail-status" class="status"></div>
+    <div id="mail-list"></div>
+  </section>
+
+  <!-- CALENDAR TAB -->
+  <section id="tab-calendar" class="hidden">
+    <div class="card" id="share-card">
+      <div style="font-weight:600; margin-bottom:6px;">Kalender teilen</div>
+      <div style="font-size:13px; color:var(--muted);">
+        Schick diesen Link z.B. deiner Frau. Ein Tipp genügt, und der Kalender
+        erscheint automatisch in ihrer iPhone-Kalender-App.
+      </div>
+      <div class="share-box" id="join-link">wird geladen...</div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="copyShareLink()">Link kopieren</button>
+        <button class="btn secondary" onclick="shareLink()">Teilen...</button>
+      </div>
+    </div>
+    <div id="events-list"></div>
+  </section>
+  <button class="fab hidden" id="add-event-fab" onclick="openEventSheet()">+</button>
+
+  <!-- SETTINGS TAB -->
+  <section id="tab-settings" class="hidden">
+    <div class="card">
+      <label>Anbieter (füllt Server automatisch aus)</label>
+      <select id="provider-select" onchange="applyPreset()">
+        <option value="custom">Benutzerdefiniert</option>
+        <option value="gmail">Gmail</option>
+        <option value="outlook">Outlook / Hotmail</option>
+        <option value="gmx">GMX</option>
+        <option value="web">Web.de</option>
+        <option value="yahoo">Yahoo</option>
+      </select>
+      <label>Name (Absender)</label>
+      <input id="acc-name" placeholder="Dein Name">
+      <label>E-Mail-Adresse</label>
+      <input id="acc-email" placeholder="du@beispiel.de">
+      <label>Passwort / App-Passwort</label>
+      <input id="acc-password" type="password" placeholder="Passwort">
+      <label>IMAP-Server</label>
+      <input id="acc-imap" placeholder="imap.beispiel.de">
+      <label>IMAP-Port</label>
+      <input id="acc-imap-port" value="993">
+      <label>SMTP-Server</label>
+      <input id="acc-smtp" placeholder="smtp.beispiel.de">
+      <label>SMTP-Port</label>
+      <input id="acc-smtp-port" value="587">
+      <button class="btn" onclick="saveAccount()">Speichern & Verbinden</button>
+      <div id="settings-status" class="status"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Mail lesen Sheet -->
+<div class="overlay hidden" id="mail-overlay" onclick="if(event.target===this) closeMailSheet()">
+  <div class="sheet">
+    <button class="close-x" onclick="closeMailSheet()">✕</button>
+    <div id="mail-detail-header" style="font-size:13px; color:var(--muted); margin-bottom:8px;"></div>
+    <h2 id="mail-detail-subject"></h2>
+    <div id="mail-detail-body" style="white-space:pre-wrap; font-size:15px; line-height:1.4; margin-bottom:16px;"></div>
+    <button class="btn" onclick="openReplySheet()">↩ Antworten</button>
+  </div>
+</div>
+
+<!-- Antwort Sheet -->
+<div class="overlay hidden" id="reply-overlay" onclick="if(event.target===this) closeReplySheet()">
+  <div class="sheet">
+    <button class="close-x" onclick="closeReplySheet()">✕</button>
+    <h2>Antworten</h2>
+    <label>An</label>
+    <input id="reply-to" disabled>
+    <label>Betreff</label>
+    <input id="reply-subject">
+    <label>Nachricht</label>
+    <textarea id="reply-body" style="min-height:200px;"></textarea>
+    <button class="btn" onclick="sendReply()">Senden</button>
+    <div id="reply-status" class="status"></div>
+  </div>
+</div>
+
+<!-- Termin erstellen Sheet -->
+<div class="overlay hidden" id="event-overlay" onclick="if(event.target===this) closeEventSheet()">
+  <div class="sheet">
+    <button class="close-x" onclick="closeEventSheet()">✕</button>
+    <h2>Neuer Termin</h2>
+    <label>Titel</label>
+    <input id="ev-title" placeholder="z.B. Abendessen mit Familie">
+    <label>Ort (optional)</label>
+    <input id="ev-location">
+    <label>Beschreibung (optional)</label>
+    <textarea id="ev-description" style="min-height:60px;"></textarea>
+    <label>Start</label>
+    <input id="ev-start" type="datetime-local">
+    <label>Ende</label>
+    <input id="ev-end" type="datetime-local">
+    <button class="btn" onclick="saveEvent()">Termin speichern</button>
+    <div id="event-status" class="status"></div>
+  </div>
+</div>
+
+<script>
+const PRESETS = {
+  gmail:   { imap: "imap.gmail.com", imap_port: 993, smtp: "smtp.gmail.com", smtp_port: 587 },
+  outlook: { imap: "outlook.office365.com", imap_port: 993, smtp: "smtp.office365.com", smtp_port: 587 },
+  gmx:     { imap: "imap.gmx.net", imap_port: 993, smtp: "mail.gmx.net", smtp_port: 587 },
+  web:     { imap: "imap.web.de", imap_port: 993, smtp: "smtp.web.de", smtp_port: 587 },
+  yahoo:   { imap: "imap.mail.yahoo.com", imap_port: 993, smtp: "smtp.mail.yahoo.com", smtp_port: 587 },
+};
+
+let currentMailUid = null;
+let currentMailDetail = null;
+let calendarInfo = null;
+
+// ---------- Tabs ----------
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+});
+
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.getElementById("tab-mail").classList.toggle("hidden", name !== "mail");
+  document.getElementById("tab-calendar").classList.toggle("hidden", name !== "calendar");
+  document.getElementById("tab-settings").classList.toggle("hidden", name !== "settings");
+  document.getElementById("add-event-fab").classList.toggle("hidden", name !== "calendar");
+  if (name === "mail") loadMailList();
+  if (name === "calendar") { loadCalendarInfo(); loadEvents(); }
+  if (name === "settings") loadAccount();
+}
+
+// ---------- Konto ----------
+function applyPreset() {
+  const key = document.getElementById("provider-select").value;
+  const p = PRESETS[key];
+  if (!p) return;
+  document.getElementById("acc-imap").value = p.imap;
+  document.getElementById("acc-imap-port").value = p.imap_port;
+  document.getElementById("acc-smtp").value = p.smtp;
+  document.getElementById("acc-smtp-port").value = p.smtp_port;
+}
+
+async function loadAccount() {
+  const res = await fetch("/api/account");
+  const data = await res.json();
+  if (data.configured) {
+    document.getElementById("acc-name").value = data.name || "";
+    document.getElementById("acc-email").value = data.email || "";
+    document.getElementById("acc-imap").value = data.imap_server || "";
+    document.getElementById("acc-imap-port").value = data.imap_port || 993;
+    document.getElementById("acc-smtp").value = data.smtp_server || "";
+    document.getElementById("acc-smtp-port").value = data.smtp_port || 587;
+  }
+}
+
+async function saveAccount() {
+  const status = document.getElementById("settings-status");
+  status.textContent = "Speichere...";
+  const body = {
+    name: document.getElementById("acc-name").value,
+    email: document.getElementById("acc-email").value,
+    password: document.getElementById("acc-password").value,
+    imap_server: document.getElementById("acc-imap").value,
+    imap_port: parseInt(document.getElementById("acc-imap-port").value),
+    smtp_server: document.getElementById("acc-smtp").value,
+    smtp_port: parseInt(document.getElementById("acc-smtp-port").value),
+  };
+  const res = await fetch("/api/account", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (data.ok) {
+    status.textContent = "Gespeichert ✓";
+    switchTab("mail");
+  } else {
+    status.textContent = "Fehler: " + (data.error || "unbekannt");
+  }
+}
+
+// ---------- Mail ----------
+async function loadMailList() {
+  const statusEl = document.getElementById("mail-status");
+  const listEl = document.getElementById("mail-list");
+  statusEl.textContent = "Lade E-Mails...";
+  listEl.innerHTML = "";
+  try {
+    const res = await fetch("/api/mail/list?limit=30");
+    const data = await res.json();
+    if (data.error) {
+      statusEl.textContent = "";
+      listEl.innerHTML = `<div class="empty-state">${data.error}<br><br>Bitte zuerst unter "Konto" einrichten.</div>`;
+      return;
+    }
+    statusEl.textContent = data.emails.length + " E-Mails";
+    if (data.emails.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">Keine E-Mails gefunden.</div>`;
+    }
+    data.emails.forEach(mail => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<div class="subject">${escapeHtml(mail.subject)}</div>
+                         <div class="from">${escapeHtml(mail.from)}</div>
+                         <div class="date">${escapeHtml(mail.date)}</div>`;
+      card.onclick = () => openMail(mail.uid);
+      listEl.appendChild(card);
+    });
+  } catch (e) {
+    statusEl.textContent = "";
+    listEl.innerHTML = `<div class="empty-state">Verbindungsfehler: ${e}</div>`;
+  }
+}
+
+async function openMail(uid) {
+  const res = await fetch("/api/mail/read?uid=" + encodeURIComponent(uid));
+  const data = await res.json();
+  if (data.error) { alert(data.error); return; }
+  currentMailUid = uid;
+  currentMailDetail = data;
+  document.getElementById("mail-detail-header").textContent = `Von: ${data.from}\nDatum: ${data.date}`;
+  document.getElementById("mail-detail-subject").textContent = data.subject;
+  document.getElementById("mail-detail-body").textContent = data.body;
+  document.getElementById("mail-overlay").classList.remove("hidden");
+}
+
+function closeMailSheet() {
+  document.getElementById("mail-overlay").classList.add("hidden");
+}
+
+function openReplySheet() {
+  const d = currentMailDetail;
+  const match = d.from.match(/<(.+?)>/);
+  const toAddr = match ? match[1] : d.from;
+  document.getElementById("reply-to").value = toAddr;
+  document.getElementById("reply-subject").value = d.subject.toLowerCase().startsWith("re:") ? d.subject : "Re: " + d.subject;
+  const quoted = d.body.split("\n").map(l => "> " + l).join("\n");
+  document.getElementById("reply-body").value = `\n\nAm ${d.date} schrieb ${d.from}:\n${quoted}`;
+  document.getElementById("reply-status").textContent = "";
+  document.getElementById("reply-overlay").classList.remove("hidden");
+}
+
+function closeReplySheet() {
+  document.getElementById("reply-overlay").classList.add("hidden");
+}
+
+async function sendReply() {
+  const status = document.getElementById("reply-status");
+  status.textContent = "Sende...";
+  const body = {
+    to: document.getElementById("reply-to").value,
+    subject: document.getElementById("reply-subject").value,
+    body: document.getElementById("reply-body").value,
+    in_reply_to: currentMailDetail ? currentMailDetail.message_id : null,
+  };
+  const res = await fetch("/api/mail/send", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (data.ok) {
+    status.textContent = "Gesendet ✓";
+    setTimeout(() => { closeReplySheet(); closeMailSheet(); }, 700);
+  } else {
+    status.textContent = "Fehler: " + (data.error || "unbekannt");
+  }
+}
+
+// ---------- Kalender ----------
+async function loadCalendarInfo() {
+  const res = await fetch("/api/calendar/info");
+  calendarInfo = await res.json();
+  document.getElementById("join-link").textContent = calendarInfo.join_link;
+}
+
+function copyShareLink() {
+  if (!calendarInfo) return;
+  navigator.clipboard.writeText(calendarInfo.join_link).then(() => {
+    alert("Link kopiert! Du kannst ihn jetzt z.B. in WhatsApp einfügen.");
+  });
+}
+
+function shareLink() {
+  if (!calendarInfo) return;
+  if (navigator.share) {
+    navigator.share({ title: "Kalender abonnieren", url: calendarInfo.join_link });
+  } else {
+    copyShareLink();
+  }
+}
+
+async function loadEvents() {
+  const listEl = document.getElementById("events-list");
+  listEl.innerHTML = `<div class="status">Lade Termine...</div>`;
+  const res = await fetch("/api/calendar/events");
+  const data = await res.json();
+  listEl.innerHTML = "";
+  if (!data.events || data.events.length === 0) {
+    listEl.innerHTML = `<div class="empty-state">Noch keine Termine. Tippe auf + um einen hinzuzufügen.</div>`;
+    return;
+  }
+  data.events.forEach(ev => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const start = new Date(ev.start_utc);
+    const end = new Date(ev.end_utc);
+    const timeStr = ev.all_day
+      ? start.toLocaleDateString("de-DE")
+      : `${start.toLocaleDateString("de-DE")} ${start.toLocaleTimeString("de-DE",{hour:'2-digit',minute:'2-digit'})} – ${end.toLocaleTimeString("de-DE",{hour:'2-digit',minute:'2-digit'})}`;
+    card.innerHTML = `<div class="event-time">${timeStr}</div>
+                       <div class="subject">${escapeHtml(ev.title)}</div>
+                       ${ev.location ? `<div class="from">📍 ${escapeHtml(ev.location)}</div>` : ""}`;
+    card.onclick = () => { if (confirm("Diesen Termin löschen?")) deleteEvent(ev.id); };
+    listEl.appendChild(card);
+  });
+}
+
+async function deleteEvent(id) {
+  await fetch("/api/calendar/events/" + id, { method: "DELETE" });
+  loadEvents();
+}
+
+function openEventSheet() {
+  document.getElementById("ev-title").value = "";
+  document.getElementById("ev-location").value = "";
+  document.getElementById("ev-description").value = "";
+  const now = new Date();
+  now.setMinutes(0,0,0);
+  now.setHours(now.getHours()+1);
+  const later = new Date(now.getTime() + 60*60*1000);
+  document.getElementById("ev-start").value = toLocalInputValue(now);
+  document.getElementById("ev-end").value = toLocalInputValue(later);
+  document.getElementById("event-status").textContent = "";
+  document.getElementById("event-overlay").classList.remove("hidden");
+}
+
+function closeEventSheet() {
+  document.getElementById("event-overlay").classList.add("hidden");
+}
+
+function toLocalInputValue(d) {
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+async function saveEvent() {
+  const status = document.getElementById("event-status");
+  const title = document.getElementById("ev-title").value.trim();
+  if (!title) { status.textContent = "Bitte einen Titel eingeben."; return; }
+  status.textContent = "Speichere...";
+  const body = {
+    title: title,
+    location: document.getElementById("ev-location").value,
+    description: document.getElementById("ev-description").value,
+    start: document.getElementById("ev-start").value,
+    end: document.getElementById("ev-end").value,
+    all_day: false,
+  };
+  const res = await fetch("/api/calendar/events", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (data.ok) {
+    closeEventSheet();
+    loadEvents();
+  } else {
+    status.textContent = "Fehler: " + (data.error || "unbekannt");
+  }
+}
+
+function escapeHtml(s) {
+  const div = document.createElement("div");
+  div.textContent = s || "";
+  return div.innerHTML;
+}
+
+// ---------- Start ----------
+loadMailList();
+
+// Service Worker registrieren (für "Zum Home-Bildschirm hinzufügen")
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>
