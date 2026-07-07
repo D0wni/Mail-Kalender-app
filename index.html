@@ -9,6 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Alpkaan">
 <link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -38,17 +41,19 @@
   /* ---------- Birnen-Logo (statt Apfel) ---------- */
   .pear-logo { display: block; }
   .pear-logo .body { fill: url(#pearGradGlobal); }
-  .pear-logo .stem { stroke: #4a6b2a; stroke-width: 4.5; fill: none; stroke-linecap: round; }
+  .pear-logo .stem { stroke: #4a6b2a; stroke-width: 4; fill: none; stroke-linecap: round; }
   .pear-logo .leaf { fill: #7cb342; }
 
-  .badge-lg { width: 84px; height: 100px; margin: 0 auto; }
-  .badge-sm { width: 30px; height: 36px; flex-shrink: 0; }
+  .badge-lg { width: 76px; height: 99px; margin: 0 auto; }
+  .badge-sm { width: 26px; height: 34px; flex-shrink: 0; }
 
-  .brand-title {
-    text-align: center; font-size: 24px; font-weight: 700; margin: 16px 0 2px;
-    letter-spacing: -0.3px; color: var(--text);
+  .wordmark {
+    font-family: "Yellowtail", cursive; font-weight: 400;
+    color: var(--text); letter-spacing: 0.5px;
   }
-  .brand-title .thin { font-weight: 400; color: var(--muted); }
+  .brand-title {
+    text-align: center; font-size: 34px; margin: 14px 0 2px; line-height: 1.1;
+  }
   .brand-sub { text-align: center; color: var(--muted); font-size: 14.5px; margin-bottom: 0; }
 
   /* ---------- Login / Registrierung ---------- */
@@ -94,18 +99,30 @@
   header {
     position: sticky; top: 0; z-index: 10;
     background: rgba(245,245,247,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    padding: 12px 16px 10px; border-bottom: 1px solid var(--border);
+    padding: 10px 16px 12px; border-bottom: 1px solid var(--border);
   }
-  .header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  header h1 { font-size: 16.5px; margin: 0; font-weight: 700; flex: 1; letter-spacing: -0.2px; }
-  .logout-link { font-size: 13px; color: var(--blue); background: none; border: none; font-family: inherit; font-weight: 500; }
-  .tabs { display: flex; gap: 3px; background: #e8e8ec; border-radius: 10px; padding: 3px; }
+  .header-row { display: flex; align-items: center; gap: 8px; justify-content: center; position: relative; }
+  header h1 { font-size: 26px; margin: 0; font-weight: 400; }
+  .logout-link {
+    position: absolute; right: 0; font-size: 13px; color: var(--blue); background: none;
+    border: none; font-family: -apple-system, sans-serif; font-weight: 500;
+  }
+  main { padding: 12px 16px calc(96px + env(safe-area-inset-bottom)); }
+
+  /* ---------- Bottom Tab Bar ---------- */
+  .bottom-tabs {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 25;
+    display: flex; background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   .tab {
-    flex: 1; text-align: center; padding: 7px 4px; border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: var(--muted);
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; padding: 8px 2px 7px; color: var(--muted); font-size: 10.5px; font-weight: 600;
   }
-  .tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
-  main { padding: 12px 16px 90px; }
+  .tab .tab-icon { font-size: 22px; line-height: 1; }
+  .tab.active { color: var(--blue); }
   .card {
     background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 10px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
@@ -116,7 +133,7 @@
   .hidden { display: none !important; }
   .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14.5px; }
   .fab {
-    position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom));
+    position: fixed; right: 20px; bottom: calc(88px + env(safe-area-inset-bottom));
     width: 56px; height: 56px; border-radius: 28px; background: var(--blue); color: #fff;
     font-size: 28px; border: none; box-shadow: 0 6px 18px rgba(0,113,227,0.35); z-index: 20;
   }
@@ -179,28 +196,27 @@
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="pearGradGlobal" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0%" stop-color="#8fce5c"/>
-      <stop offset="100%" stop-color="#568233"/>
+      <stop offset="0%" stop-color="#9ed86a"/>
+      <stop offset="100%" stop-color="#4f7a34"/>
     </linearGradient>
+    <mask id="biteMaskShared">
+      <rect width="100" height="130" fill="white"/>
+      <circle cx="72" cy="60" r="14" fill="black"/>
+    </mask>
   </defs>
 </svg>
 
 <!-- ================= LOGIN / REGISTRIERUNG ================= -->
 <div id="auth-screen">
   <div class="auth-box">
-    <svg class="pear-logo badge-lg" viewBox="0 0 100 120">
-      <mask id="biteMaskLg">
-        <rect x="0" y="0" width="100" height="120" fill="white"/>
-        <circle cx="60" cy="37" r="13" fill="black"/>
-      </mask>
-      <g mask="url(#biteMaskLg)">
-        <ellipse class="body" cx="50" cy="80" rx="25" ry="30"/>
-        <ellipse class="body" cx="47" cy="44" rx="16" ry="18"/>
+    <svg class="pear-logo badge-lg" viewBox="0 0 100 130">
+      <g mask="url(#biteMaskShared)">
+        <path class="body" d="M50,125 C85,122 88,90 82,78 C78,64 66,50 50,14 C34,50 22,64 18,78 C12,90 15,122 50,125 Z"/>
       </g>
-      <path class="stem" d="M49 22 Q52 11 61 8"/>
-      <path class="leaf" d="M60 8 Q71 4 75 12 Q68 15 60 12 Z"/>
+      <path class="stem" d="M49,16 Q52,6 61,4"/>
+      <path class="leaf" d="M60,4 Q71,0 75,8 Q68,11 60,8 Z"/>
     </svg>
-    <div class="brand-title">ALPKAAN<span class="thin">'s App</span></div>
+    <div class="brand-title wordmark">Alpkaan's App</div>
     <div class="brand-sub">Mail &amp; Kalender, an einem Ort</div>
 
     <div class="auth-card">
@@ -234,26 +250,15 @@
 <div id="app-shell">
 <header>
   <div class="header-row">
-    <svg class="pear-logo badge-sm" viewBox="0 0 100 120">
-      <mask id="biteMaskSm">
-        <rect x="0" y="0" width="100" height="120" fill="white"/>
-        <circle cx="60" cy="37" r="13" fill="black"/>
-      </mask>
-      <g mask="url(#biteMaskSm)">
-        <ellipse class="body" cx="50" cy="80" rx="25" ry="30"/>
-        <ellipse class="body" cx="47" cy="44" rx="16" ry="18"/>
+    <svg class="pear-logo badge-sm" viewBox="0 0 100 130">
+      <g mask="url(#biteMaskShared)">
+        <path class="body" d="M50,125 C85,122 88,90 82,78 C78,64 66,50 50,14 C34,50 22,64 18,78 C12,90 15,122 50,125 Z"/>
       </g>
-      <path class="stem" d="M49 22 Q52 11 61 8"/>
-      <path class="leaf" d="M60 8 Q71 4 75 12 Q68 15 60 12 Z"/>
+      <path class="stem" d="M49,16 Q52,6 61,4"/>
+      <path class="leaf" d="M60,4 Q71,0 75,8 Q68,11 60,8 Z"/>
     </svg>
-    <h1>ALPKAAN's App</h1>
+    <h1 class="wordmark">Alpkaan's App</h1>
     <button class="logout-link" onclick="doLogout()">Abmelden</button>
-  </div>
-  <div class="tabs">
-    <div class="tab active" data-tab="mail">Mail</div>
-    <div class="tab" data-tab="calendar">Kalender</div>
-    <div class="tab" data-tab="game">Spiel</div>
-    <div class="tab" data-tab="settings">Konto</div>
   </div>
 </header>
 
@@ -346,6 +351,13 @@
   </section>
 
 </main>
+
+<nav class="bottom-tabs">
+  <div class="tab active" data-tab="mail"><span class="tab-icon">📬</span>Mail</div>
+  <div class="tab" data-tab="calendar"><span class="tab-icon">📅</span>Kalender</div>
+  <div class="tab" data-tab="game"><span class="tab-icon">🎮</span>Spiel</div>
+  <div class="tab" data-tab="settings"><span class="tab-icon">⚙️</span>Konto</div>
+</nav>
 </div>
 
 <!-- Mail lesen Sheet -->
@@ -842,9 +854,22 @@ function startGame() {
   playRound();
 }
 
+function getLitCount(level) {
+  // Ab Level 8, 15 und 20 kommt jeweils ein weiterer gleichzeitig leuchtender Kreis dazu
+  if (level >= 20) return 4;
+  if (level >= 15) return 3;
+  if (level >= 8) return 2;
+  return 1;
+}
+
 function roundDuration(level) {
-  // Wird mit steigendem Level schneller, Untergrenze bei 260ms
-  return Math.max(260, 1100 - level * 45);
+  const litCount = getLitCount(level);
+  // Langsamerer Zeitabfall als zuvor, höhere Untergrenze (500ms statt 260ms)
+  const base = Math.max(500, 1300 - level * 28);
+  // Pro zusätzlichem gleichzeitig leuchtendem Kreis gibt es mehr Zeit,
+  // damit es bei mehreren Kreisen weiterhin machbar bleibt
+  const bonus = (litCount - 1) * 550;
+  return base + bonus;
 }
 
 function playRound() {
@@ -852,8 +877,7 @@ function playRound() {
   gameCells.forEach(c => c.className = "game-cell");
   gameLitIndices = new Set();
 
-  // Kreative Steigerung: ab Level 5 (und jedem 5. danach) leuchten 2 Kreise gleichzeitig
-  const litCount = (gameLevel > 0 && gameLevel % 5 === 0) ? 2 : 1;
+  const litCount = getLitCount(gameLevel);
   while (gameLitIndices.size < litCount) {
     gameLitIndices.add(Math.floor(Math.random() * GRID_SIZE));
   }
