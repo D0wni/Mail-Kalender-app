@@ -271,6 +271,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _serve_kiglobal_site(self):
+        """Öffentliche KI-Global-Website (kiglobal-website/index.html)."""
+        full_path = os.path.join(BASE_DIR, "kiglobal-website", "index.html")
+        if not os.path.isfile(full_path):
+            self._send_text("Nicht gefunden", 404)
+            return
+        with open(full_path, "rb") as f:
+            body = f.read()
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def log_message(self, fmt, *args):
         pass
 
@@ -312,6 +326,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             if path.startswith("/join/"):
                 token = path[len("/join/"):]
                 return self.get_join_page(token)
+            if path in ("/kiglobal", "/kiglobal/"):
+                return self._serve_kiglobal_site()
             if not path.startswith("/api/"):
                 return self._serve_static_file(path)
 

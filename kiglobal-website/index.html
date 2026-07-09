@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KI Global – Verbindungselemente | Produktion &amp; Handel</title>
+<meta name="description" content="KI Global – Produktion und Handel mit Verbindungselementen: Schrauben, Bolzen, Scheiben, Hülsen, Dreh- und Frästeile, Kalt- und Warmumformteile.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Cpath d='M50 4 92 28 v54 L50 106 8 82 V28 Z' fill='%23f08300'/%3E%3Cpath d='M50 16 81 34 v42 L50 94 19 76 V34 Z' fill='%230e1826'/%3E%3Ccircle cx='50' cy='55' r='17' fill='none' stroke='%23ffb14a' stroke-width='6'/%3E%3C/svg%3E">
+<style>
+:root{
+  --steel-950:#0a111b;
+  --steel-900:#0e1826;
+  --steel-800:#152234;
+  --steel-700:#1e3048;
+  --steel-100:#e8edf3;
+  --ink:#16222f;
+  --muted:#5b6b7c;
+  --line:#dfe6ee;
+  --bg-light:#f4f7fa;
+  --amber:#ff9e1b;
+  --amber-deep:#f08300;
+  --amber-soft:rgba(255,158,27,.12);
+  --font-disp:'Space Grotesk','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --radius:14px;
+  --shadow:0 10px 30px rgba(10,17,27,.10);
+  --shadow-lg:0 24px 60px rgba(10,17,27,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+/* Bewusst Systemschriften statt Google Fonts: DSGVO-sicher und ohne externe Abhängigkeit */
+body{
+  font-family:'Inter','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg-light);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-disp);line-height:1.15;letter-spacing:-.01em}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section{padding:96px 0}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--amber-deep);margin-bottom:14px;
+}
+.kicker::before{content:"";width:28px;height:2px;background:var(--amber);border-radius:2px}
+.section-title{font-size:clamp(1.7rem,3.4vw,2.5rem);margin-bottom:16px}
+.section-lead{color:var(--muted);max-width:640px;font-size:1.06rem}
+
+/* ---------- Navigation ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(14,24,38,.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  transition:background .3s;
+}
+.nav-inner{display:flex;align-items:center;gap:28px;height:72px;max-width:1180px;margin:0 auto;padding:0 24px}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.brand .word{font-family:var(--font-disp);font-weight:700;font-size:1.25rem;color:#fff;letter-spacing:.02em}
+.brand .word b{color:var(--amber)}
+.brand .sub{display:block;font-size:.6rem;letter-spacing:.28em;color:#8fa3b8;text-transform:uppercase;font-weight:600}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  color:#c8d4e0;font-size:.92rem;font-weight:500;padding:8px 13px;border-radius:8px;
+  transition:color .2s,background .2s;
+}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nav-cta{
+  background:var(--amber);color:var(--steel-950)!important;font-weight:700!important;
+  padding:9px 18px!important;border-radius:9px!important;
+}
+.nav-cta:hover{background:#ffb14a!important}
+.lang-switch{display:flex;gap:2px;background:rgba(255,255,255,.08);border-radius:9px;padding:3px}
+.lang-switch button{
+  border:0;background:transparent;color:#9fb1c3;font:600 .78rem var(--font-disp);
+  padding:5px 9px;border-radius:7px;cursor:pointer;transition:all .2s;
+}
+.lang-switch button.active{background:var(--amber);color:var(--steel-950)}
+.burger{display:none;border:0;background:transparent;cursor:pointer;padding:8px}
+.burger span{display:block;width:24px;height:2px;background:#fff;margin:5px 0;border-radius:2px;transition:transform .3s,opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(900px 500px at 80% -10%,rgba(255,158,27,.13),transparent 60%),
+    radial-gradient(700px 500px at -10% 110%,rgba(56,112,180,.18),transparent 60%),
+    var(--steel-950);
+  color:#fff;
+  padding:180px 0 120px;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 50% 40%,#000 30%,transparent 75%);
+}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.hero .badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  padding:7px 14px;border-radius:99px;font-size:.82rem;color:#c9d6e2;margin-bottom:22px;
+}
+.hero .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--amber)}
+.hero p.lead{color:#a8b8c8;font-size:1.12rem;max-width:540px;margin-bottom:34px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-weight:700;font-size:.98rem;padding:14px 26px;border-radius:11px;
+  border:0;cursor:pointer;transition:transform .15s,box-shadow .2s,background .2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--amber);color:var(--steel-950);box-shadow:0 8px 24px rgba(255,158,27,.32)}
+.btn-primary:hover{background:#ffb14a}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.16)}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.hero-art{position:relative}
+.hero-art svg{width:100%;height:auto;filter:drop-shadow(0 20px 50px rgba(0,0,0,.4))}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinRev{to{transform:rotate(-360deg)}}
+.gear-big{transform-origin:210px 190px;animation:spin 26s linear infinite}
+.gear-small{transform-origin:352px 96px;animation:spinRev 18s linear infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.float-1{animation:floaty 6s ease-in-out infinite}
+.float-2{animation:floaty 7s ease-in-out infinite reverse}
+
+/* ---------- Stats ---------- */
+.stats{position:relative;z-index:5;margin-top:-56px}
+.stats-card{
+  background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);
+  display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;
+}
+.stat{padding:30px 24px;text-align:center;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0}
+.stat .num{font-family:var(--font-disp);font-size:2.1rem;font-weight:700;color:var(--steel-900)}
+.stat .num i{font-style:normal;color:var(--amber-deep)}
+.stat .lbl{font-size:.85rem;color:var(--muted);font-weight:500}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.about-points{margin-top:26px;display:grid;gap:14px}
+.about-point{display:flex;gap:14px;align-items:flex-start}
+.about-point .ic{
+  flex-shrink:0;width:40px;height:40px;border-radius:10px;background:var(--amber-soft);
+  display:grid;place-items:center;color:var(--amber-deep);
+}
+.about-point h4{font-size:1rem;margin-bottom:2px}
+.about-point p{color:var(--muted);font-size:.93rem}
+.about-visual{
+  background:var(--steel-900);border-radius:20px;padding:40px;color:#fff;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-lg);
+}
+.about-visual::after{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;pointer-events:none;
+}
+.about-visual svg{width:78%;margin:0 auto;position:relative;z-index:2}
+.about-visual .cap{position:relative;z-index:2;text-align:center;margin-top:18px;color:#9fb1c3;font-size:.88rem}
+
+/* ---------- Products ---------- */
+#produkte{background:#fff}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px;margin-top:48px}
+.prod-card{
+  background:var(--bg-light);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px 24px;transition:transform .25s,box-shadow .25s,border-color .25s;
+  position:relative;overflow:hidden;
+}
+.prod-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--amber),var(--amber-deep));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
+}
+.prod-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:transparent;background:#fff}
+.prod-card:hover::before{transform:scaleX(1)}
+.prod-ic{
+  width:58px;height:58px;border-radius:14px;background:var(--steel-900);
+  display:grid;place-items:center;margin-bottom:18px;color:var(--amber);
+}
+.prod-card h3{font-size:1.12rem;margin-bottom:8px}
+.prod-card p{color:var(--muted);font-size:.92rem;margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{
+  font-size:.72rem;font-weight:600;color:var(--steel-700);
+  background:#eaf0f6;border:1px solid var(--line);padding:3px 9px;border-radius:99px;
+}
+
+/* ---------- Services ---------- */
+#leistungen{background:var(--steel-950);color:#fff;position:relative;overflow:hidden}
+#leistungen::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(700px 400px at 90% 0%,rgba(255,158,27,.09),transparent 60%);
+}
+#leistungen .section-lead{color:#a8b8c8}
+.svc-grid{position:relative;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:48px}
+.svc-card{
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--radius);padding:30px 26px;transition:background .25s,transform .25s;
+}
+.svc-card:hover{background:rgba(255,255,255,.08);transform:translateY(-5px)}
+.svc-ic{
+  width:52px;height:52px;border-radius:13px;background:var(--amber);color:var(--steel-950);
+  display:grid;place-items:center;margin-bottom:18px;
+}
+.svc-card h3{font-size:1.1rem;margin-bottom:9px;color:#fff}
+.svc-card p{color:#a8b8c8;font-size:.93rem}
+
+/* ---------- Why ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:36px;margin-top:48px}
+.why-item .no{
+  font-family:var(--font-disp);font-size:2.6rem;font-weight:700;
+  color:transparent;-webkit-text-stroke:1.5px var(--amber-deep);line-height:1;margin-bottom:12px;
+}
+.why-item h3{font-size:1.08rem;margin-bottom:8px}
+.why-item p{color:var(--muted);font-size:.93rem}
+
+/* ---------- Contact ---------- */
+#kontakt{background:#fff}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;margin-top:48px}
+.c-info{display:grid;gap:16px;align-content:start}
+.c-card{
+  display:flex;gap:16px;align-items:flex-start;background:var(--bg-light);
+  border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;
+}
+.c-card .ic{
+  flex-shrink:0;width:44px;height:44px;border-radius:11px;background:var(--steel-900);
+  color:var(--amber);display:grid;place-items:center;
+}
+.c-card h4{font-size:.95rem;margin-bottom:3px}
+.c-card p{color:var(--muted);font-size:.92rem;line-height:1.5}
+form.c-form{
+  background:var(--bg-light);border:1px solid var(--line);border-radius:18px;padding:34px;
+  display:grid;gap:16px;
+}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{font-size:.84rem;font-weight:600;color:var(--steel-700);display:grid;gap:6px}
+input,select,textarea{
+  font:inherit;font-size:.95rem;padding:12px 14px;border:1.5px solid var(--line);
+  border-radius:10px;background:#fff;color:var(--ink);width:100%;transition:border-color .2s,box-shadow .2s;
+}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+textarea{resize:vertical;min-height:120px}
+.form-note{font-size:.8rem;color:var(--muted)}
+
+/* ---------- Footer ---------- */
+footer{background:var(--steel-950);color:#8fa3b8;padding:64px 0 32px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
+.foot-grid p{font-size:.92rem;max-width:340px;margin-top:14px}
+footer h4{color:#fff;font-size:.95rem;margin-bottom:14px}
+footer ul{list-style:none;display:grid;gap:9px}
+footer ul a{font-size:.92rem;transition:color .2s}
+footer ul a:hover{color:var(--amber)}
+.foot-bottom{
+  border-top:1px solid rgba(255,255,255,.08);padding-top:24px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.84rem;
+}
+
+/* ---------- Reveal animation ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- Chat widget ---------- */
+.chat-fab{
+  position:fixed;right:22px;bottom:22px;z-index:200;
+  width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(135deg,var(--amber),var(--amber-deep));color:var(--steel-950);
+  display:grid;place-items:center;box-shadow:0 12px 32px rgba(240,131,0,.45);
+  transition:transform .2s;
+}
+.chat-fab:hover{transform:scale(1.07)}
+.chat-fab .close-ic{display:none}
+.chat-fab.open .chat-ic{display:none}
+.chat-fab.open .close-ic{display:block}
+.chat-fab .ping{
+  position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;
+  background:#34c759;border:2.5px solid #fff;
+}
+.chat-box{
+  position:fixed;right:22px;bottom:98px;z-index:200;
+  width:min(380px,calc(100vw - 32px));height:min(560px,calc(100vh - 130px));
+  background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);
+  display:flex;flex-direction:column;overflow:hidden;
+  opacity:0;transform:translateY(18px) scale(.97);pointer-events:none;
+  transition:opacity .25s,transform .25s;
+}
+.chat-box.open{opacity:1;transform:none;pointer-events:auto}
+.chat-head{
+  background:var(--steel-950);color:#fff;padding:16px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.chat-avatar{
+  width:42px;height:42px;border-radius:12px;background:var(--amber);color:var(--steel-950);
+  display:grid;place-items:center;flex-shrink:0;
+}
+.chat-head .t{font-family:var(--font-disp);font-weight:700;font-size:1rem}
+.chat-head .s{font-size:.76rem;color:#9fb1c3;display:flex;align-items:center;gap:6px}
+.chat-head .s::before{content:"";width:7px;height:7px;border-radius:50%;background:#34c759}
+.chat-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--bg-light)}
+.msg{max-width:82%;padding:11px 15px;border-radius:16px;font-size:.92rem;line-height:1.5;white-space:pre-line;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px;align-self:flex-start;box-shadow:0 2px 8px rgba(10,17,27,.05)}
+.msg.user{background:var(--steel-900);color:#fff;border-bottom-right-radius:5px;align-self:flex-end}
+.typing{display:inline-flex;gap:5px;padding:14px 16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9fb1c3;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}
+.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px;background:var(--bg-light)}
+.chips button{
+  border:1.5px solid var(--line);background:#fff;color:var(--steel-700);
+  font:600 .8rem var(--font-disp);padding:7px 13px;border-radius:99px;cursor:pointer;
+  transition:all .2s;
+}
+.chips button:hover{border-color:var(--amber);color:var(--amber-deep);background:var(--amber-soft)}
+.chat-input{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line);background:#fff}
+.chat-input input{flex:1;border-radius:99px;padding:11px 18px}
+.chat-input button{
+  width:46px;height:46px;border-radius:50%;border:0;background:var(--amber);color:var(--steel-950);
+  display:grid;place-items:center;cursor:pointer;flex-shrink:0;transition:background .2s;
+}
+.chat-input button:hover{background:#ffb14a}
+
+/* ---------- Responsive ---------- */
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .hero-art{max-width:440px;margin:0 auto}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .stats-card{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0}
+  .stat{border-top:1px solid var(--line)}
+  .stat:nth-child(-n+2){border-top:0}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:820px){
+  .nav-links{
+    position:fixed;top:72px;left:0;right:0;flex-direction:column;align-items:stretch;
+    background:var(--steel-900);padding:16px 24px 24px;gap:4px;
+    transform:translateY(-130%);transition:transform .3s;border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav-links.open{transform:none}
+  .nav-links a{padding:13px 14px}
+  .burger{display:block}
+  .section{padding:72px 0}
+  .hero{padding:150px 0 100px}
+  .f-row{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .nav-inner{gap:12px;padding:0 16px}
+  .brand .sub{display:none}
+  .brand .word{font-size:1.1rem}
+  .lang-switch button{padding:5px 7px}
+}
+@media(max-width:520px){
+  .foot-grid{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== NAVIGATION ==================== -->
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="KI Global – Start">
+      <!-- Logo: Sechskantmutter mit Gewindebohrung -->
+      <svg width="40" height="44" viewBox="0 0 100 110" aria-hidden="true">
+        <defs>
+          <linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffb14a"/><stop offset="1" stop-color="#f08300"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 4 92 28 v54 L50 106 8 82 V28 Z" fill="url(#lgNav)"/>
+        <path d="M50 16 81 34 v42 L50 94 19 76 V34 Z" fill="#0e1826"/>
+        <circle cx="50" cy="55" r="17" fill="none" stroke="url(#lgNav)" stroke-width="6"/>
+        <circle cx="50" cy="55" r="24" fill="none" stroke="url(#lgNav)" stroke-width="2.5" stroke-dasharray="4 5"/>
+      </svg>
+      <span>
+        <span class="word">KI<b>GLOBAL</b></span>
+        <span class="sub" data-i18n="brandSub">Verbindungselemente</span>
+      </span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#ueber" data-i18n="navAbout">Über uns</a>
+      <a href="#produkte" data-i18n="navProducts">Produkte</a>
+      <a href="#leistungen" data-i18n="navServices">Leistungen</a>
+      <a href="#warum" data-i18n="navWhy">Warum wir</a>
+      <a href="#kontakt" class="nav-cta" data-i18n="navContact">Kontakt</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Sprache">
+      <button data-lang="de" class="active">DE</button>
+      <button data-lang="tr">TR</button>
+      <button data-lang="en">EN</button>
+    </div>
+    <button class="burger" id="burger" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge"><span class="dot"></span><span data-i18n="heroBadge">Produktion &amp; Handel seit Generationen</span></span>
+      <h1 data-i18n-html="heroTitle">Verbindungselemente, die <em>halten</em>. Weltweit.</h1>
+      <p class="lead" data-i18n="heroLead">KI Global produziert und handelt mit hochwertigen Verbindungselementen – von Schrauben und Bolzen bis zu präzisen Dreh-, Fräs- und Umformteilen. Zuverlässig, normgerecht, termintreu.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#produkte" data-i18n="heroCta1">Produkte entdecken</a>
+        <a class="btn btn-ghost" href="#kontakt" data-i18n="heroCta2">Angebot anfragen</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 440 380">
+        <defs>
+          <linearGradient id="gAmber" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffb14a"/><stop offset="1" stop-color="#f08300"/>
+          </linearGradient>
+          <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a5878"/><stop offset="1" stop-color="#1e3048"/>
+          </linearGradient>
+        </defs>
+        <!-- großes Zahnrad -->
+        <g class="gear-big">
+          <path fill="url(#gSteel)" d="M210 80l14 4 10-22 26 8-2 24 13 8 18-16 19 20-15 19 7 13 24-1 6 27-23 9-1 15 22 11-9 26-24-4-8 13 15 19-21 18-19-16-13 7 3 24-27 5-9-22-15 1-10 22-26-8 3-24-13-8-19 16-18-20 15-19-7-14-24 2-5-27 22-9 1-15-22-11 9-26 24 4 8-13-15-19 21-17 19 15 13-7-3-24z"/>
+          <circle cx="210" cy="190" r="64" fill="#0e1826"/>
+          <circle cx="210" cy="190" r="30" fill="none" stroke="url(#gAmber)" stroke-width="10"/>
+          <circle cx="210" cy="190" r="48" fill="none" stroke="#2c4562" stroke-width="3" stroke-dasharray="6 8"/>
+        </g>
+        <!-- kleines Zahnrad -->
+        <g class="gear-small">
+          <path fill="url(#gAmber)" d="M352 46l8 2 6-13 15 5-1 14 7 4 11-9 11 12-9 11 4 8 14-1 3 16-13 5 0 9 13 6-5 15-14-2-5 7 9 11-12 11-11-9-8 4 2 14-16 3-5-13-9 0-6 13-15-5 2-14-8-4-11 9-10-12 9-11-4-8-14 1-3-16 13-5 0-9-12-6 5-15 14 2 4-7-8-11 12-10 11 9 7-4-1-14z"/>
+          <circle cx="352" cy="96" r="24" fill="#0e1826"/>
+          <circle cx="352" cy="96" r="11" fill="none" stroke="#ffb14a" stroke-width="6"/>
+        </g>
+        <!-- Schraube schräg -->
+        <g class="float-1" transform="rotate(38 110 300)">
+          <rect x="70" y="286" width="52" height="30" rx="4" fill="url(#gAmber)"/>
+          <rect x="122" y="292" width="98" height="18" fill="url(#gSteel)"/>
+          <g stroke="#0e1826" stroke-width="3" opacity=".55">
+            <line x1="132" y1="290" x2="126" y2="312"/><line x1="146" y1="290" x2="140" y2="312"/>
+            <line x1="160" y1="290" x2="154" y2="312"/><line x1="174" y1="290" x2="168" y2="312"/>
+            <line x1="188" y1="290" x2="182" y2="312"/><line x1="202" y1="290" x2="196" y2="312"/>
+          </g>
+          <polygon points="220,292 232,301 220,310" fill="url(#gSteel)"/>
+        </g>
+        <!-- Sechskantmutter klein -->
+        <g class="float-2">
+          <path d="M78 120 104 135 v30 L78 180 52 165 v-30 Z" fill="url(#gSteel)"/>
+          <circle cx="78" cy="150" r="11" fill="#0a111b"/>
+          <circle cx="78" cy="150" r="11" fill="none" stroke="#ffb14a" stroke-width="3.5"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STATS ==================== -->
+<div class="stats">
+  <div class="container">
+    <div class="stats-card reveal">
+      <!-- TODO: Kennzahlen durch echte Werte ersetzen -->
+      <div class="stat"><div class="num"><span data-count="25">0</span><i>+</i></div><div class="lbl" data-i18n="stat1">Jahre Erfahrung</div></div>
+      <div class="stat"><div class="num"><span data-count="5000">0</span><i>+</i></div><div class="lbl" data-i18n="stat2">Artikel im Sortiment</div></div>
+      <div class="stat"><div class="num"><span data-count="30">0</span><i>+</i></div><div class="lbl" data-i18n="stat3">Belieferte Länder</div></div>
+      <div class="stat"><div class="num"><span data-count="99">0</span><i>%</i></div><div class="lbl" data-i18n="stat4">Liefertreue</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ÜBER UNS ==================== -->
+<section class="section" id="ueber">
+  <div class="container about-grid">
+    <div class="reveal">
+      <span class="kicker" data-i18n="aboutKicker">Über uns</span>
+      <h2 class="section-title" data-i18n="aboutTitle">Ihr Partner für Produktion und Handel von Verbindungselementen</h2>
+      <p class="section-lead" data-i18n="aboutLead">KI Global vereint moderne Fertigung mit internationalem Handel. Wir liefern Standard- und Sonderteile in gleichbleibend hoher Qualität – vom Einzelstück bis zur Großserie, nach DIN, ISO und Kundenzeichnung.</p>
+      <div class="about-points">
+        <div class="about-point">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5 5 0 0 0-6.8 6.8L3 18v3h3l4.9-4.9a5 5 0 0 0 6.8-6.8l-3.2 3.2-2.8-2.8z"/></svg></div>
+          <div><h4 data-i18n="aboutP1t">Eigene Fertigung</h4><p data-i18n="aboutP1d">Dreh-, Fräs- und Umformtechnik für Präzisionsteile nach Zeichnung.</p></div>
+        </div>
+        <div class="about-point">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
+          <div><h4 data-i18n="aboutP2t">Internationaler Handel</h4><p data-i18n="aboutP2d">Starkes Lieferanten-Netzwerk und Export in über 30 Länder.</p></div>
+        </div>
+        <div class="about-point">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div><h4 data-i18n="aboutP3t">Geprüfte Qualität</h4><p data-i18n="aboutP3d">Durchgängige Qualitätskontrolle und Dokumentation nach Norm.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <svg viewBox="0 0 100 110" aria-hidden="true">
+        <defs>
+          <linearGradient id="lgAbout" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffb14a"/><stop offset="1" stop-color="#f08300"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 4 92 28 v54 L50 106 8 82 V28 Z" fill="url(#lgAbout)"/>
+        <path d="M50 16 81 34 v42 L50 94 19 76 V34 Z" fill="#0e1826"/>
+        <circle cx="50" cy="55" r="17" fill="none" stroke="url(#lgAbout)" stroke-width="6"/>
+        <circle cx="50" cy="55" r="24" fill="none" stroke="url(#lgAbout)" stroke-width="2.5" stroke-dasharray="4 5"/>
+      </svg>
+      <div class="cap" data-i18n="aboutCap">Präzision im Detail – Verbindungen fürs Ganze.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRODUKTE ==================== -->
+<section class="section" id="produkte">
+  <div class="container">
+    <span class="kicker reveal" data-i18n="prodKicker">Produkte</span>
+    <h2 class="section-title reveal" data-i18n="prodTitle">Unser Sortiment</h2>
+    <p class="section-lead reveal" data-i18n="prodLead">Standardteile ab Lager und Sonderanfertigungen nach Ihrer Zeichnung – in allen gängigen Werkstoffen, Festigkeitsklassen und Oberflächen.</p>
+    <div class="prod-grid">
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h6v4H5zM8 7v14M6 10h4M6 13h4M6 16h4M6 19h4"/></svg></div>
+        <h3 data-i18n="p1t">Schrauben</h3>
+        <p data-i18n="p1d">Maschinen-, Blech- und Sonderschrauben in allen Abmessungen und Festigkeitsklassen.</p>
+        <div class="tags"><span>DIN</span><span>ISO</span><span>8.8–12.9</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="7" height="6" rx="1"/><path d="M10 10.5h11M10 13.5h11M21 10.5v3"/></svg></div>
+        <h3 data-i18n="p2t">Bolzen</h3>
+        <p data-i18n="p2d">Pass-, Steck- und Gewindebolzen für höchste Belastungen – auch nach Zeichnung.</p>
+        <div class="tags"><span data-i18n="tagCustom">Sonderteile</span><span data-i18n="tagDrawing">n. Zeichnung</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg></div>
+        <h3 data-i18n="p3t">Scheiben</h3>
+        <p data-i18n="p3d">Unterleg-, Feder- und Passscheiben in Stahl, Edelstahl und Sonderwerkstoffen.</p>
+        <div class="tags"><span>DIN 125</span><span>DIN 9021</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="6" ry="2.5"/><path d="M6 5v14c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5V5"/><ellipse cx="12" cy="19" rx="3" ry="1.2"/></svg></div>
+        <h3 data-i18n="p4t">Hülsen</h3>
+        <p data-i18n="p4d">Distanz-, Gewinde- und Spannhülsen – präzise gefertigt für jede Anwendung.</p>
+        <div class="tags"><span data-i18n="tagPrecision">Präzision</span><span data-i18n="tagSeries">Serienfertigung</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10l3 4-3 4H3zM16 12h5M13 4v2M13 18v2"/></svg></div>
+        <h3 data-i18n="p5t">Dreh- &amp; Frästeile</h3>
+        <p data-i18n="p5d">CNC-gefertigte Präzisionsteile nach Kundenzeichnung – vom Prototyp bis zur Serie.</p>
+        <div class="tags"><span>CNC</span><span data-i18n="tagDrawing2">n. Zeichnung</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M2 12h20M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3"/></svg></div>
+        <h3 data-i18n="p6t">Kaltumformteile</h3>
+        <p data-i18n="p6d">Wirtschaftliche Kaltumformung für große Stückzahlen bei engen Toleranzen.</p>
+        <div class="tags"><span data-i18n="tagVolume">Großserie</span><span data-i18n="tagEfficient">Wirtschaftlich</span></div>
+      </div>
+      <div class="prod-card reveal">
+        <div class="prod-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 6 4.5 6 9a6 6 0 0 1-12 0c0-4.5 4-6 6-9z"/><path d="M12 12c1 1.5 2.5 2 2.5 4a2.5 2.5 0 0 1-5 0c0-2 1.5-2.5 2.5-4z"/></svg></div>
+        <h3 data-i18n="p7t">Warmumformteile</h3>
+        <p data-i18n="p7d">Warmumgeformte Teile für komplexe Geometrien und höchste Festigkeit.</p>
+        <div class="tags"><span data-i18n="tagStrength">Hochfest</span><span data-i18n="tagComplex">Komplexe Formen</span></div>
+      </div>
+      <div class="prod-card reveal" style="display:grid;place-content:center;text-align:center;background:var(--steel-900);border-color:var(--steel-900)">
+        <h3 style="color:#fff;margin-bottom:8px" data-i18n="p8t">Nicht gefunden?</h3>
+        <p style="color:#a8b8c8" data-i18n="p8d">Wir beschaffen und fertigen auch außergewöhnliche Teile.</p>
+        <a href="#kontakt" class="btn btn-primary" style="margin:14px auto 0;padding:11px 20px;font-size:.88rem" data-i18n="p8c">Jetzt anfragen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LEISTUNGEN ==================== -->
+<section class="section" id="leistungen">
+  <div class="container">
+    <span class="kicker reveal" data-i18n="svcKicker">Leistungen</span>
+    <h2 class="section-title reveal" data-i18n="svcTitle">Mehr als nur Teile</h2>
+    <p class="section-lead reveal" data-i18n="svcLead">Von der technischen Beratung bis zur Lieferung ans Band – wir begleiten Ihr Projekt über die gesamte Kette.</p>
+    <div class="svc-grid">
+      <div class="svc-card reveal">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h10l6 6v10H4zM14 4v6h6"/><path d="M8 13h8M8 17h5"/></svg></div>
+        <h3 data-i18n="svc1t">Fertigung nach Zeichnung</h3>
+        <p data-i18n="svc1d">Senden Sie uns Ihre technische Zeichnung – wir fertigen Sonderteile exakt nach Ihren Vorgaben, vom Muster bis zur Großserie.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="svc2t">Qualitätssicherung</h3>
+        <p data-i18n="svc2d">Prüfmittelüberwachte Kontrolle, Werkszeugnisse und Chargenrückverfolgbarkeit – Qualität, die dokumentiert ist.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v9H1zM14 11h4l4 3v3h-8z"/><circle cx="6" cy="19.5" r="1.8"/><circle cx="17.5" cy="19.5" r="1.8"/></svg></div>
+        <h3 data-i18n="svc3t">Logistik &amp; Export</h3>
+        <p data-i18n="svc3d">Weltweiter Versand, Rahmenverträge mit Abrufen und Kanban-Belieferung – Ihre Teile sind da, wenn Sie sie brauchen.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5 5 0 0 0-6.8 6.8L3 18v3h3l4.9-4.9a5 5 0 0 0 6.8-6.8l-3.2 3.2-2.8-2.8z"/></svg></div>
+        <h3 data-i18n="svc4t">Technische Beratung</h3>
+        <p data-i18n="svc4d">Werkstoffauswahl, Oberflächen, Festigkeitsklassen: Unsere Experten finden die wirtschaftlichste Lösung für Ihre Anwendung.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WARUM WIR ==================== -->
+<section class="section" id="warum">
+  <div class="container">
+    <span class="kicker reveal" data-i18n="whyKicker">Warum KI Global</span>
+    <h2 class="section-title reveal" data-i18n="whyTitle">Gute Gründe für eine starke Verbindung</h2>
+    <div class="why-grid">
+      <div class="why-item reveal">
+        <div class="no">01</div>
+        <h3 data-i18n="why1t">Alles aus einer Hand</h3>
+        <p data-i18n="why1d">Produktion und Handel kombiniert: Wir liefern Standard und Sonder – ein Ansprechpartner, eine Rechnung.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="no">02</div>
+        <h3 data-i18n="why2t">Normgerechte Qualität</h3>
+        <p data-i18n="why2d">Fertigung und Prüfung nach DIN- und ISO-Standards, mit Zeugnissen und Rückverfolgbarkeit.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="no">03</div>
+        <h3 data-i18n="why3t">Faire Preise</h3>
+        <p data-i18n="why3d">Direkte Fertigung und starke Einkaufsquellen sichern Ihnen wettbewerbsfähige Konditionen.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="no">04</div>
+        <h3 data-i18n="why4t">Schnell &amp; zuverlässig</h3>
+        <p data-i18n="why4d">Kurze Reaktionszeiten, verbindliche Termine und weltweite Lieferung – darauf können Sie bauen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== KONTAKT ==================== -->
+<section class="section" id="kontakt">
+  <div class="container">
+    <span class="kicker reveal" data-i18n="ctKicker">Kontakt</span>
+    <h2 class="section-title reveal" data-i18n="ctTitle">Lassen Sie uns sprechen</h2>
+    <p class="section-lead reveal" data-i18n="ctLead">Senden Sie uns Ihre Anfrage – Sie erhalten schnellstmöglich ein Angebot.</p>
+    <div class="contact-grid">
+      <div class="c-info reveal">
+        <!-- TODO: echte Kontaktdaten von kiglobal.de eintragen -->
+        <div class="c-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><h4 data-i18n="ctAddrT">Adresse</h4><p data-i18n="ctAddrD">Musterstraße 1<br>12345 Musterstadt</p></div>
+        </div>
+        <div class="c-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0 1 22 16.9z"/></svg></div>
+          <div><h4 data-i18n="ctPhoneT">Telefon</h4><p>+49&nbsp;000&nbsp;0000000</p></div>
+        </div>
+        <div class="c-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></div>
+          <div><h4>E-Mail</h4><p>info@kiglobal.de</p></div>
+        </div>
+        <div class="c-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div><h4 data-i18n="ctHoursT">Erreichbarkeit</h4><p data-i18n="ctHoursD">Mo–Fr: 08:00–17:00 Uhr</p></div>
+        </div>
+      </div>
+      <form class="c-form reveal" id="contactForm">
+        <div class="f-row">
+          <label><span data-i18n="fName">Name *</span><input type="text" id="fName" required data-i18n-ph="fNamePh" placeholder="Ihr Name"></label>
+          <label><span data-i18n="fCompany">Firma</span><input type="text" id="fCompany" data-i18n-ph="fCompanyPh" placeholder="Ihre Firma"></label>
+        </div>
+        <div class="f-row">
+          <label><span>E-Mail *</span><input type="email" id="fEmail" required placeholder="name@firma.de"></label>
+          <label><span data-i18n="fPhone">Telefon</span><input type="tel" id="fPhone" placeholder="+49 …"></label>
+        </div>
+        <label><span data-i18n="fTopic">Thema</span>
+          <select id="fTopic">
+            <option data-i18n="fTopic1">Angebot / Anfrage</option>
+            <option data-i18n="fTopic2">Fertigung nach Zeichnung</option>
+            <option data-i18n="fTopic3">Allgemeine Frage</option>
+          </select>
+        </label>
+        <label><span data-i18n="fMsg">Ihre Nachricht *</span><textarea id="fMsg" required data-i18n-ph="fMsgPh" placeholder="Artikel, Abmessung, Menge, Werkstoff …"></textarea></label>
+        <button type="submit" class="btn btn-primary" data-i18n="fSend">Anfrage senden</button>
+        <p class="form-note" data-i18n="fNote">* Pflichtfelder. Beim Absenden öffnet sich Ihr E-Mail-Programm mit der fertigen Nachricht.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg width="36" height="40" viewBox="0 0 100 110" aria-hidden="true">
+            <defs>
+              <linearGradient id="lgFoot" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffb14a"/><stop offset="1" stop-color="#f08300"/>
+              </linearGradient>
+            </defs>
+            <path d="M50 4 92 28 v54 L50 106 8 82 V28 Z" fill="url(#lgFoot)"/>
+            <path d="M50 16 81 34 v42 L50 94 19 76 V34 Z" fill="#0a111b"/>
+            <circle cx="50" cy="55" r="17" fill="none" stroke="url(#lgFoot)" stroke-width="6"/>
+          </svg>
+          <span><span class="word">KI<b>GLOBAL</b></span></span>
+        </a>
+        <p data-i18n="footAbout">Produktion und Handel mit Verbindungselementen. Schrauben, Bolzen, Scheiben, Hülsen sowie Dreh-, Fräs- und Umformteile – normgerecht und termintreu.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footNav">Navigation</h4>
+        <ul>
+          <li><a href="#ueber" data-i18n="navAbout2">Über uns</a></li>
+          <li><a href="#produkte" data-i18n="navProducts2">Produkte</a></li>
+          <li><a href="#leistungen" data-i18n="navServices2">Leistungen</a></li>
+          <li><a href="#kontakt" data-i18n="navContact2">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="footLegal">Rechtliches</h4>
+        <ul>
+          <!-- TODO: Impressum & Datenschutz verlinken -->
+          <li><a href="#" data-i18n="footImprint">Impressum</a></li>
+          <li><a href="#" data-i18n="footPrivacy">Datenschutz</a></li>
+          <li><a href="#" data-i18n="footTerms">AGB</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> KI Global. <span data-i18n="footRights">Alle Rechte vorbehalten.</span></span>
+      <span data-i18n="footMade">Verbindungen, auf die man bauen kann.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== CHAT WIDGET ==================== -->
+<div class="chat-box" id="chatBox" role="dialog" aria-label="Chat-Assistent">
+  <div class="chat-head">
+    <div class="chat-avatar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M8 4h8"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/></svg>
+    </div>
+    <div>
+      <div class="t" data-i18n="chatTitle">KI Global Assistent</div>
+      <div class="s" data-i18n="chatOnline">Online – antwortet sofort</div>
+    </div>
+  </div>
+  <div class="chat-log" id="chatLog"></div>
+  <div class="chips" id="chatChips"></div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" data-i18n-ph="chatPh" placeholder="Ihre Frage …" autocomplete="off">
+    <button id="chatSend" aria-label="Senden">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+</div>
+<button class="chat-fab" id="chatFab" aria-label="Chat öffnen">
+  <span class="ping"></span>
+  <svg class="chat-ic" width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/><circle cx="9" cy="12" r=".8" fill="currentColor"/><circle cx="13" cy="12" r=".8" fill="currentColor"/><circle cx="17" cy="12" r=".8" fill="currentColor"/></svg>
+  <svg class="close-ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+</button>
+
+<script>
+/* =============================================================
+   Übersetzungen (DE ist Standard im HTML, TR/EN werden gesetzt)
+   ============================================================= */
+const I18N = {
+  brandSub:{de:"Verbindungselemente",tr:"Bağlantı Elemanları",en:"Fastening Elements"},
+  navAbout:{de:"Über uns",tr:"Hakkımızda",en:"About us"},
+  navProducts:{de:"Produkte",tr:"Ürünler",en:"Products"},
+  navServices:{de:"Leistungen",tr:"Hizmetler",en:"Services"},
+  navWhy:{de:"Warum wir",tr:"Neden Biz",en:"Why us"},
+  navContact:{de:"Kontakt",tr:"İletişim",en:"Contact"},
+  heroBadge:{de:"Produktion & Handel von Verbindungselementen",tr:"Bağlantı elemanları üretimi ve ticareti",en:"Production & trade of fastening elements"},
+  heroTitle:{
+    de:'Verbindungselemente, die <em>halten</em>. Weltweit.',
+    tr:'Sağlam <em>bağlantılar</em>. Dünya çapında.',
+    en:'Fasteners that <em>hold</em>. Worldwide.'
+  },
+  heroLead:{
+    de:"KI Global produziert und handelt mit hochwertigen Verbindungselementen – von Schrauben und Bolzen bis zu präzisen Dreh-, Fräs- und Umformteilen. Zuverlässig, normgerecht, termintreu.",
+    tr:"KI Global, vidalardan cıvatalara, hassas torna, freze ve şekillendirme parçalarına kadar yüksek kaliteli bağlantı elemanları üretir ve ticaretini yapar. Güvenilir, standartlara uygun, zamanında.",
+    en:"KI Global produces and trades high-quality fastening elements – from screws and bolts to precision turned, milled and formed parts. Reliable, standards-compliant, on time."
+  },
+  heroCta1:{de:"Produkte entdecken",tr:"Ürünleri keşfedin",en:"Explore products"},
+  heroCta2:{de:"Angebot anfragen",tr:"Teklif isteyin",en:"Request a quote"},
+  stat1:{de:"Jahre Erfahrung",tr:"Yıllık deneyim",en:"Years of experience"},
+  stat2:{de:"Artikel im Sortiment",tr:"Ürün çeşidi",en:"Items in range"},
+  stat3:{de:"Belieferte Länder",tr:"Ülkeye teslimat",en:"Countries supplied"},
+  stat4:{de:"Liefertreue",tr:"Zamanında teslimat",en:"On-time delivery"},
+  aboutKicker:{de:"Über uns",tr:"Hakkımızda",en:"About us"},
+  aboutTitle:{
+    de:"Ihr Partner für Produktion und Handel von Verbindungselementen",
+    tr:"Bağlantı elemanları üretimi ve ticaretinde güvenilir ortağınız",
+    en:"Your partner for production and trade of fastening elements"
+  },
+  aboutLead:{
+    de:"KI Global vereint moderne Fertigung mit internationalem Handel. Wir liefern Standard- und Sonderteile in gleichbleibend hoher Qualität – vom Einzelstück bis zur Großserie, nach DIN, ISO und Kundenzeichnung.",
+    tr:"KI Global, modern üretimi uluslararası ticaretle birleştirir. Standart ve özel parçaları, tek parçadan büyük serilere kadar DIN, ISO ve müşteri çizimlerine göre sürekli yüksek kalitede teslim ediyoruz.",
+    en:"KI Global combines modern manufacturing with international trade. We supply standard and special parts in consistently high quality – from single pieces to large series, according to DIN, ISO and customer drawings."
+  },
+  aboutP1t:{de:"Eigene Fertigung",tr:"Kendi üretimimiz",en:"In-house production"},
+  aboutP1d:{de:"Dreh-, Fräs- und Umformtechnik für Präzisionsteile nach Zeichnung.",tr:"Çizime göre hassas parçalar için torna, freze ve şekillendirme teknolojisi.",en:"Turning, milling and forming technology for precision parts to drawing."},
+  aboutP2t:{de:"Internationaler Handel",tr:"Uluslararası ticaret",en:"International trade"},
+  aboutP2d:{de:"Starkes Lieferanten-Netzwerk und Export in über 30 Länder.",tr:"Güçlü tedarikçi ağı ve 30'dan fazla ülkeye ihracat.",en:"Strong supplier network and export to over 30 countries."},
+  aboutP3t:{de:"Geprüfte Qualität",tr:"Test edilmiş kalite",en:"Certified quality"},
+  aboutP3d:{de:"Durchgängige Qualitätskontrolle und Dokumentation nach Norm.",tr:"Standartlara uygun sürekli kalite kontrolü ve dokümantasyon.",en:"End-to-end quality control and documentation to standard."},
+  aboutCap:{de:"Präzision im Detail – Verbindungen fürs Ganze.",tr:"Detayda hassasiyet – bütün için bağlantılar.",en:"Precision in detail – connections for the whole."},
+  prodKicker:{de:"Produkte",tr:"Ürünler",en:"Products"},
+  prodTitle:{de:"Unser Sortiment",tr:"Ürün yelpazemiz",en:"Our range"},
+  prodLead:{
+    de:"Standardteile ab Lager und Sonderanfertigungen nach Ihrer Zeichnung – in allen gängigen Werkstoffen, Festigkeitsklassen und Oberflächen.",
+    tr:"Stoktan standart parçalar ve çiziminize göre özel üretim – tüm yaygın malzemelerde, mukavemet sınıflarında ve yüzeylerde.",
+    en:"Standard parts from stock and custom production to your drawing – in all common materials, strength classes and finishes."
+  },
+  p1t:{de:"Schrauben",tr:"Vidalar",en:"Screws"},
+  p1d:{de:"Maschinen-, Blech- und Sonderschrauben in allen Abmessungen und Festigkeitsklassen.",tr:"Her ölçü ve mukavemet sınıfında makine, sac ve özel vidalar.",en:"Machine, sheet-metal and special screws in all dimensions and strength classes."},
+  p2t:{de:"Bolzen",tr:"Cıvatalar / Pimler",en:"Bolts"},
+  p2d:{de:"Pass-, Steck- und Gewindebolzen für höchste Belastungen – auch nach Zeichnung.",tr:"En yüksek yükler için pasolu, geçme ve dişli pimler – çizime göre de üretilir.",en:"Fitted, plug-in and threaded bolts for maximum loads – also made to drawing."},
+  p3t:{de:"Scheiben",tr:"Pullar / Rondelalar",en:"Washers"},
+  p3d:{de:"Unterleg-, Feder- und Passscheiben in Stahl, Edelstahl und Sonderwerkstoffen.",tr:"Çelik, paslanmaz çelik ve özel malzemelerden düz, yaylı ve ayar pulları.",en:"Flat, spring and shim washers in steel, stainless steel and special materials."},
+  p4t:{de:"Hülsen",tr:"Kovanlar / Burçlar",en:"Sleeves"},
+  p4d:{de:"Distanz-, Gewinde- und Spannhülsen – präzise gefertigt für jede Anwendung.",tr:"Mesafe, dişli ve sıkma kovanları – her uygulama için hassas üretim.",en:"Spacer, threaded and clamping sleeves – precisely manufactured for every application."},
+  p5t:{de:"Dreh- & Frästeile",tr:"Torna ve Freze Parçaları",en:"Turned & Milled Parts"},
+  p5d:{de:"CNC-gefertigte Präzisionsteile nach Kundenzeichnung – vom Prototyp bis zur Serie.",tr:"Müşteri çizimine göre CNC hassas parçalar – prototipten seriye.",en:"CNC-machined precision parts to customer drawing – from prototype to series."},
+  p6t:{de:"Kaltumformteile",tr:"Soğuk Şekillendirme",en:"Cold-Formed Parts"},
+  p6d:{de:"Wirtschaftliche Kaltumformung für große Stückzahlen bei engen Toleranzen.",tr:"Dar toleranslarda büyük adetler için ekonomik soğuk şekillendirme.",en:"Economical cold forming for large quantities with tight tolerances."},
+  p7t:{de:"Warmumformteile",tr:"Sıcak Şekillendirme",en:"Hot-Formed Parts"},
+  p7d:{de:"Warmumgeformte Teile für komplexe Geometrien und höchste Festigkeit.",tr:"Karmaşık geometriler ve en yüksek mukavemet için sıcak şekillendirilmiş parçalar.",en:"Hot-formed parts for complex geometries and maximum strength."},
+  p8t:{de:"Nicht gefunden?",tr:"Bulamadınız mı?",en:"Not found?"},
+  p8d:{de:"Wir beschaffen und fertigen auch außergewöhnliche Teile.",tr:"Sıra dışı parçaları da tedarik eder ve üretiriz.",en:"We also source and manufacture exceptional parts."},
+  p8c:{de:"Jetzt anfragen",tr:"Hemen sorun",en:"Ask now"},
+  tagCustom:{de:"Sonderteile",tr:"Özel parçalar",en:"Custom parts"},
+  tagDrawing:{de:"n. Zeichnung",tr:"Çizime göre",en:"To drawing"},
+  tagDrawing2:{de:"n. Zeichnung",tr:"Çizime göre",en:"To drawing"},
+  tagPrecision:{de:"Präzision",tr:"Hassasiyet",en:"Precision"},
+  tagSeries:{de:"Serienfertigung",tr:"Seri üretim",en:"Series production"},
+  tagVolume:{de:"Großserie",tr:"Büyük seri",en:"High volume"},
+  tagEfficient:{de:"Wirtschaftlich",tr:"Ekonomik",en:"Economical"},
+  tagStrength:{de:"Hochfest",tr:"Yüksek mukavemet",en:"High strength"},
+  tagComplex:{de:"Komplexe Formen",tr:"Karmaşık formlar",en:"Complex shapes"},
+  svcKicker:{de:"Leistungen",tr:"Hizmetler",en:"Services"},
+  svcTitle:{de:"Mehr als nur Teile",tr:"Parçadan fazlası",en:"More than just parts"},
+  svcLead:{
+    de:"Von der technischen Beratung bis zur Lieferung ans Band – wir begleiten Ihr Projekt über die gesamte Kette.",
+    tr:"Teknik danışmanlıktan hatta teslimata kadar – projenize tüm zincir boyunca eşlik ediyoruz.",
+    en:"From technical consulting to line-side delivery – we support your project along the entire chain."
+  },
+  svc1t:{de:"Fertigung nach Zeichnung",tr:"Çizime göre üretim",en:"Production to drawing"},
+  svc1d:{de:"Senden Sie uns Ihre technische Zeichnung – wir fertigen Sonderteile exakt nach Ihren Vorgaben, vom Muster bis zur Großserie.",tr:"Teknik çiziminizi bize gönderin – özel parçaları numuneden büyük seriye kadar tam istediğiniz gibi üretiriz.",en:"Send us your technical drawing – we manufacture special parts exactly to your specifications, from sample to large series."},
+  svc2t:{de:"Qualitätssicherung",tr:"Kalite güvencesi",en:"Quality assurance"},
+  svc2d:{de:"Prüfmittelüberwachte Kontrolle, Werkszeugnisse und Chargenrückverfolgbarkeit – Qualität, die dokumentiert ist.",tr:"Kalibre edilmiş ölçüm cihazlarıyla kontrol, fabrika sertifikaları ve parti izlenebilirliği – belgelenmiş kalite.",en:"Calibrated inspection, mill certificates and batch traceability – quality that is documented."},
+  svc3t:{de:"Logistik & Export",tr:"Lojistik ve İhracat",en:"Logistics & Export"},
+  svc3d:{de:"Weltweiter Versand, Rahmenverträge mit Abrufen und Kanban-Belieferung – Ihre Teile sind da, wenn Sie sie brauchen.",tr:"Dünya çapında sevkiyat, çağrılı çerçeve sözleşmeler ve Kanban teslimatı – parçalarınız ihtiyaç anında hazır.",en:"Worldwide shipping, call-off framework contracts and Kanban delivery – your parts are there when you need them."},
+  svc4t:{de:"Technische Beratung",tr:"Teknik danışmanlık",en:"Technical consulting"},
+  svc4d:{de:"Werkstoffauswahl, Oberflächen, Festigkeitsklassen: Unsere Experten finden die wirtschaftlichste Lösung für Ihre Anwendung.",tr:"Malzeme seçimi, yüzeyler, mukavemet sınıfları: Uzmanlarımız uygulamanız için en ekonomik çözümü bulur.",en:"Material selection, finishes, strength classes: our experts find the most economical solution for your application."},
+  whyKicker:{de:"Warum KI Global",tr:"Neden KI Global",en:"Why KI Global"},
+  whyTitle:{de:"Gute Gründe für eine starke Verbindung",tr:"Güçlü bir bağlantı için iyi nedenler",en:"Good reasons for a strong connection"},
+  why1t:{de:"Alles aus einer Hand",tr:"Her şey tek elden",en:"Everything from one source"},
+  why1d:{de:"Produktion und Handel kombiniert: Wir liefern Standard und Sonder – ein Ansprechpartner, eine Rechnung.",tr:"Üretim ve ticaret bir arada: Standart ve özel parçaları tek muhataptan, tek faturayla teslim ediyoruz.",en:"Production and trade combined: we supply standard and special – one contact, one invoice."},
+  why2t:{de:"Normgerechte Qualität",tr:"Standartlara uygun kalite",en:"Standards-compliant quality"},
+  why2d:{de:"Fertigung und Prüfung nach DIN- und ISO-Standards, mit Zeugnissen und Rückverfolgbarkeit.",tr:"DIN ve ISO standartlarına göre üretim ve test, sertifikalar ve izlenebilirlik ile.",en:"Production and testing to DIN and ISO standards, with certificates and traceability."},
+  why3t:{de:"Faire Preise",tr:"Adil fiyatlar",en:"Fair prices"},
+  why3d:{de:"Direkte Fertigung und starke Einkaufsquellen sichern Ihnen wettbewerbsfähige Konditionen.",tr:"Doğrudan üretim ve güçlü tedarik kaynakları size rekabetçi koşullar sağlar.",en:"Direct production and strong sourcing secure competitive conditions for you."},
+  why4t:{de:"Schnell & zuverlässig",tr:"Hızlı ve güvenilir",en:"Fast & reliable"},
+  why4d:{de:"Kurze Reaktionszeiten, verbindliche Termine und weltweite Lieferung – darauf können Sie bauen.",tr:"Kısa yanıt süreleri, kesin termin ve dünya çapında teslimat – buna güvenebilirsiniz.",en:"Short response times, firm deadlines and worldwide delivery – you can build on that."},
+  ctKicker:{de:"Kontakt",tr:"İletişim",en:"Contact"},
+  ctTitle:{de:"Lassen Sie uns sprechen",tr:"Konuşalım",en:"Let's talk"},
+  ctLead:{de:"Senden Sie uns Ihre Anfrage – Sie erhalten schnellstmöglich ein Angebot.",tr:"Talebinizi bize gönderin – en kısa sürede teklif alırsınız.",en:"Send us your inquiry – you will receive a quote as soon as possible."},
+  ctAddrT:{de:"Adresse",tr:"Adres",en:"Address"},
+  ctAddrD:{de:"Musterstraße 1<br>12345 Musterstadt",tr:"Örnek Cadde 1<br>12345 Örnek Şehir",en:"Sample Street 1<br>12345 Sample City"},
+  ctPhoneT:{de:"Telefon",tr:"Telefon",en:"Phone"},
+  ctHoursT:{de:"Erreichbarkeit",tr:"Çalışma saatleri",en:"Office hours"},
+  ctHoursD:{de:"Mo–Fr: 08:00–17:00 Uhr",tr:"Pzt–Cum: 08:00–17:00",en:"Mon–Fri: 8am–5pm"},
+  fName:{de:"Name *",tr:"İsim *",en:"Name *"},
+  fNamePh:{de:"Ihr Name",tr:"Adınız",en:"Your name"},
+  fCompany:{de:"Firma",tr:"Firma",en:"Company"},
+  fCompanyPh:{de:"Ihre Firma",tr:"Firmanız",en:"Your company"},
+  fPhone:{de:"Telefon",tr:"Telefon",en:"Phone"},
+  fTopic:{de:"Thema",tr:"Konu",en:"Topic"},
+  fTopic1:{de:"Angebot / Anfrage",tr:"Teklif / Talep",en:"Quote / Inquiry"},
+  fTopic2:{de:"Fertigung nach Zeichnung",tr:"Çizime göre üretim",en:"Production to drawing"},
+  fTopic3:{de:"Allgemeine Frage",tr:"Genel soru",en:"General question"},
+  fMsg:{de:"Ihre Nachricht *",tr:"Mesajınız *",en:"Your message *"},
+  fMsgPh:{de:"Artikel, Abmessung, Menge, Werkstoff …",tr:"Ürün, ölçü, adet, malzeme …",en:"Item, dimensions, quantity, material …"},
+  fSend:{de:"Anfrage senden",tr:"Talebi gönder",en:"Send inquiry"},
+  fNote:{de:"* Pflichtfelder. Beim Absenden öffnet sich Ihr E-Mail-Programm mit der fertigen Nachricht.",tr:"* Zorunlu alanlar. Gönderirken e-posta programınız hazır mesajla açılır.",en:"* Required fields. On submit your email client opens with the prepared message."},
+  footAbout:{
+    de:"Produktion und Handel mit Verbindungselementen. Schrauben, Bolzen, Scheiben, Hülsen sowie Dreh-, Fräs- und Umformteile – normgerecht und termintreu.",
+    tr:"Bağlantı elemanları üretimi ve ticareti. Vidalar, cıvatalar, pullar, kovanlar ile torna, freze ve şekillendirme parçaları – standartlara uygun ve zamanında.",
+    en:"Production and trade of fastening elements. Screws, bolts, washers, sleeves as well as turned, milled and formed parts – standards-compliant and on time."
+  },
+  footNav:{de:"Navigation",tr:"Menü",en:"Navigation"},
+  navAbout2:{de:"Über uns",tr:"Hakkımızda",en:"About us"},
+  navProducts2:{de:"Produkte",tr:"Ürünler",en:"Products"},
+  navServices2:{de:"Leistungen",tr:"Hizmetler",en:"Services"},
+  navContact2:{de:"Kontakt",tr:"İletişim",en:"Contact"},
+  footLegal:{de:"Rechtliches",tr:"Yasal",en:"Legal"},
+  footImprint:{de:"Impressum",tr:"Künye",en:"Imprint"},
+  footPrivacy:{de:"Datenschutz",tr:"Gizlilik",en:"Privacy"},
+  footTerms:{de:"AGB",tr:"Şartlar",en:"Terms"},
+  footRights:{de:"Alle Rechte vorbehalten.",tr:"Tüm hakları saklıdır.",en:"All rights reserved."},
+  footMade:{de:"Verbindungen, auf die man bauen kann.",tr:"Güvenebileceğiniz bağlantılar.",en:"Connections you can build on."},
+  chatTitle:{de:"KI Global Assistent",tr:"KI Global Asistan",en:"KI Global Assistant"},
+  chatOnline:{de:"Online – antwortet sofort",tr:"Çevrimiçi – hemen yanıtlar",en:"Online – replies instantly"},
+  chatPh:{de:"Ihre Frage …",tr:"Sorunuz …",en:"Your question …"}
+};
+
+let lang = localStorage.getItem("kig-lang") || "de";
+
+function applyLang(l){
+  lang = l;
+  localStorage.setItem("kig-lang", l);
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k = el.getAttribute("data-i18n");
+    if(I18N[k] && I18N[k][l] !== undefined) el.innerHTML = I18N[k][l];
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{
+    const k = el.getAttribute("data-i18n-html");
+    if(I18N[k] && I18N[k][l] !== undefined) el.innerHTML = I18N[k][l];
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const k = el.getAttribute("data-i18n-ph");
+    if(I18N[k] && I18N[k][l] !== undefined) el.placeholder = I18N[k][l];
+  });
+  document.querySelectorAll(".lang-switch button").forEach(b=>
+    b.classList.toggle("active", b.dataset.lang === l));
+  renderChips();
+}
+document.querySelectorAll(".lang-switch button").forEach(b=>
+  b.addEventListener("click", ()=>applyLang(b.dataset.lang)));
+
+/* ---------- Mobile Menü ---------- */
+const burger = document.getElementById("burger");
+const navLinks = document.getElementById("navLinks");
+burger.addEventListener("click", ()=>{
+  burger.classList.toggle("open");
+  navLinks.classList.toggle("open");
+});
+navLinks.querySelectorAll("a").forEach(a=>a.addEventListener("click", ()=>{
+  burger.classList.remove("open");
+  navLinks.classList.remove("open");
+}));
+
+/* ---------- Scroll-Reveal ---------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+  });
+},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* ---------- Zähler-Animation ---------- */
+const cio = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    cio.unobserve(e.target);
+    const target = +e.target.dataset.count;
+    const dur = 1400, t0 = performance.now();
+    (function tick(t){
+      const p = Math.min((t - t0)/dur, 1);
+      e.target.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString("de-DE");
+      if(p < 1) requestAnimationFrame(tick);
+    })(t0);
+  });
+},{threshold:.4});
+document.querySelectorAll("[data-count]").forEach(el=>cio.observe(el));
+
+/* ---------- Kontaktformular (mailto) ---------- */
+document.getElementById("contactForm").addEventListener("submit", ev=>{
+  ev.preventDefault();
+  const v = id=>document.getElementById(id).value.trim();
+  const topic = document.getElementById("fTopic");
+  const subject = "Anfrage über kiglobal.de – " + topic.options[topic.selectedIndex].text;
+  const body =
+    "Name: " + v("fName") + "\n" +
+    "Firma: " + (v("fCompany")||"-") + "\n" +
+    "E-Mail: " + v("fEmail") + "\n" +
+    "Telefon: " + (v("fPhone")||"-") + "\n\n" +
+    v("fMsg");
+  /* TODO: echte Empfängeradresse eintragen */
+  openMailto("mailto:info@kiglobal.de?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body));
+});
+function openMailto(url){ window.location.href = url; }
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* =============================================================
+   Chat-Assistent (regelbasiert, läuft komplett im Browser)
+   ============================================================= */
+const BOT = {
+  de:{
+    greeting:"Hallo! 👋 Ich bin der Assistent von KI Global. Ich beantworte Fragen zu unseren Produkten, zur Fertigung und zum Kontakt. Wie kann ich helfen?",
+    fallback:"Das habe ich leider nicht verstanden. 🤔 Ich kann Ihnen bei Fragen zu Produkten, Angeboten, Fertigung nach Zeichnung, Lieferung und Kontakt helfen – oder nutzen Sie einfach unser Kontaktformular weiter unten.",
+    chips:["Produkte","Angebot anfragen","Fertigung nach Zeichnung","Kontakt"],
+    intents:[
+      {k:["hallo","hi","hey","guten tag","moin","servus","merhaba"],r:"Hallo! 👋 Schön, dass Sie da sind. Fragen Sie mich z. B. nach unseren Produkten, einem Angebot oder unseren Kontaktdaten."},
+      {k:["schraube"],r:"🔩 Wir liefern Schrauben in allen gängigen Abmessungen: Maschinen-, Blech- und Sonderschrauben, Festigkeitsklassen 8.8 bis 12.9, nach DIN/ISO, in Stahl, Edelstahl und Sonderwerkstoffen. Für ein Angebot nennen Sie uns einfach Norm, Abmessung und Menge!"},
+      {k:["bolzen","pim"],r:"Wir fertigen und liefern Pass-, Steck- und Gewindebolzen – auch als Sonderanfertigung nach Ihrer Zeichnung. Senden Sie uns Ihre Anforderungen über das Kontaktformular!"},
+      {k:["scheibe","unterleg","rondel"],r:"Wir führen Unterleg-, Feder- und Passscheiben (z. B. DIN 125, DIN 9021) in Stahl, Edelstahl und Sonderwerkstoffen – ab Lager oder als Sonderfertigung."},
+      {k:["hülse","huelse","distanz","burc"],r:"Distanz-, Gewinde- und Spannhülsen gehören zu unserem Kernsortiment – präzise gefertigt, auch nach Ihrer Zeichnung."},
+      {k:["dreh","fräs","fraes","cnc","gedreht"],r:"⚙️ Unsere CNC-Fertigung produziert Dreh- und Frästeile nach Ihrer Kundenzeichnung – vom Prototyp bis zur Großserie, mit dokumentierter Qualitätskontrolle."},
+      {k:["kaltumform","warmumform","umform","umgeformt"],r:"Wir bieten Kalt- und Warmumformteile: Kaltumformung für wirtschaftliche Großserien mit engen Toleranzen, Warmumformung für komplexe Geometrien und höchste Festigkeit."},
+      {k:["produkt","sortiment","lieferprogramm","artikel","teile","was macht","was bietet"],r:"Unser Sortiment umfasst:\n🔩 Schrauben & Bolzen\n⭕ Scheiben & Hülsen\n⚙️ Dreh- & Frästeile (CNC)\n🔧 Kalt- & Warmumformteile\n\nAlles nach DIN/ISO oder Ihrer Zeichnung. Was suchen Sie genau?"},
+      {k:["angebot","preis","kosten","anfrage","offerte","bestell","kaufen"],r:"Gerne erstellen wir Ihnen ein Angebot! 📋 Am schnellsten geht es über das Kontaktformular unten auf der Seite oder per E-Mail an info@kiglobal.de. Hilfreich sind: Artikel/Norm, Abmessung, Werkstoff und Menge."},
+      {k:["zeichnung","sonderanfertigung","sonderteil","spezial","custom","muster","prototyp"],r:"📐 Fertigung nach Zeichnung ist unsere Stärke! Senden Sie uns Ihre technische Zeichnung (PDF/DXF/STEP) per E-Mail – wir prüfen die Machbarkeit und melden uns schnellstmöglich mit einem Angebot. Vom Einzelmuster bis zur Großserie."},
+      {k:["qualität","qualitaet","zertifikat","din","iso","norm","prüf","zeugnis"],r:"✅ Qualität hat bei uns System: Fertigung und Prüfung nach DIN- und ISO-Standards, prüfmittelüberwachte Kontrolle, Werkszeugnisse und Chargenrückverfolgbarkeit auf Wunsch."},
+      {k:["liefer","versand","transport","export","dauer","wie lange","logistik"],r:"🚚 Wir liefern weltweit – Lagerware in der Regel kurzfristig, Sonderanfertigungen je nach Umfang. Auch Rahmenverträge mit Abrufen und Kanban-Belieferung sind möglich. Für verbindliche Lieferzeiten fragen Sie uns gerne direkt an."},
+      {k:["kontakt","erreich","telefon","mail","adresse","anruf","standort"],r:"📞 Sie erreichen uns:\nE-Mail: info@kiglobal.de\nTelefon: +49 000 0000000\nMo–Fr: 08:00–17:00 Uhr\n\nOder nutzen Sie einfach das Kontaktformular unten auf dieser Seite."},
+      {k:["firma","unternehmen","über","ueber","wer seid","wer sind","geschichte"],r:"KI Global ist Produzent und Händler von Verbindungselementen: Schrauben, Bolzen, Scheiben, Hülsen sowie Dreh-, Fräs- und Umformteile. Wir kombinieren eigene Fertigung mit einem internationalen Handelsnetzwerk – Qualität nach Norm, Lieferung weltweit."},
+      {k:["danke","super","top","perfekt","klasse"],r:"Sehr gerne! 😊 Wenn Sie noch Fragen haben, bin ich hier. Ansonsten freuen wir uns auf Ihre Anfrage!"},
+      {k:["tschüss","tschuess","ciao","bye","auf wiedersehen"],r:"Auf Wiedersehen! 👋 Bis bald bei KI Global."}
+    ]
+  },
+  tr:{
+    greeting:"Merhaba! 👋 Ben KI Global asistanıyım. Ürünlerimiz, üretim ve iletişim hakkındaki sorularınızı yanıtlarım. Nasıl yardımcı olabilirim?",
+    fallback:"Bunu maalesef anlayamadım. 🤔 Ürünler, teklifler, çizime göre üretim, teslimat ve iletişim konularında yardımcı olabilirim – ya da aşağıdaki iletişim formunu kullanabilirsiniz.",
+    chips:["Ürünler","Teklif iste","Çizime göre üretim","İletişim"],
+    intents:[
+      {k:["merhaba","selam","gunaydin","günaydın","iyi gunler","iyi günler"],r:"Merhaba! 👋 Hoş geldiniz. Bana ürünlerimizi, teklif almayı veya iletişim bilgilerimizi sorabilirsiniz."},
+      {k:["vida","civata","cıvata"],r:"🔩 Her ölçüde vida ve cıvata tedarik ediyoruz: makine, sac ve özel vidalar, 8.8–12.9 mukavemet sınıfları, DIN/ISO standartlarında, çelik ve paslanmaz çelik. Teklif için norm, ölçü ve adet bildirmeniz yeterli!"},
+      {k:["pul","rondela"],r:"Düz, yaylı ve ayar pullarını (örn. DIN 125, DIN 9021) çelik, paslanmaz ve özel malzemelerde stoktan veya özel üretimle sunuyoruz."},
+      {k:["kovan","burc","burç"],r:"Mesafe, dişli ve sıkma kovanları ana ürünlerimizdendir – çiziminize göre de hassas şekilde üretilir."},
+      {k:["torna","freze","cnc"],r:"⚙️ CNC üretimimiz, müşteri çizimine göre torna ve freze parçaları üretir – prototipten büyük seriye, belgeli kalite kontrolüyle."},
+      {k:["soguk","soğuk","sicak","sıcak","sekillendirme","şekillendirme"],r:"Soğuk ve sıcak şekillendirme parçaları sunuyoruz: dar toleranslı ekonomik büyük seriler için soğuk şekillendirme, karmaşık geometriler için sıcak şekillendirme."},
+      {k:["urun","ürün","katalog","yelpaze","ne satiyor","ne yapiyor"],r:"Ürün yelpazemiz:\n🔩 Vidalar ve cıvatalar\n⭕ Pullar ve kovanlar\n⚙️ Torna ve freze parçaları (CNC)\n🔧 Soğuk ve sıcak şekillendirme\n\nHepsi DIN/ISO'ya veya çiziminize göre. Tam olarak ne arıyorsunuz?"},
+      {k:["teklif","fiyat","siparis","sipariş","satin","satın"],r:"Size memnuniyetle teklif hazırlarız! 📋 En hızlısı sayfanın altındaki iletişim formu veya info@kiglobal.de adresine e-posta. Ürün/norm, ölçü, malzeme ve adet bilgisi işimizi kolaylaştırır."},
+      {k:["cizim","çizim","ozel","özel","numune","prototip"],r:"📐 Çizime göre üretim bizim uzmanlığımız! Teknik çiziminizi (PDF/DXF/STEP) e-posta ile gönderin – uygunluğu inceleyip en kısa sürede teklifle dönüş yaparız."},
+      {k:["kalite","sertifika","din","iso","standart"],r:"✅ Kalitemiz sistemlidir: DIN ve ISO standartlarına göre üretim ve test, kalibre edilmiş ölçümlerle kontrol, fabrika sertifikaları ve istenirse parti izlenebilirliği."},
+      {k:["teslimat","kargo","nakliye","ihracat","ne zaman","sure","süre","lojistik"],r:"🚚 Dünya çapında teslimat yapıyoruz – stok ürünler genellikle kısa sürede, özel üretimler kapsamına göre. Çerçeve sözleşme ve Kanban teslimatı da mümkün."},
+      {k:["iletisim","iletişim","telefon","mail","adres","ulas","ulaş"],r:"📞 Bize ulaşın:\nE-posta: info@kiglobal.de\nTelefon: +49 000 0000000\nPzt–Cum: 08:00–17:00\n\nVeya sayfanın altındaki iletişim formunu kullanın."},
+      {k:["firma","sirket","şirket","hakkinda","hakkında","kimsiniz"],r:"KI Global, bağlantı elemanları üreticisi ve tedarikçisidir: vidalar, cıvatalar, pullar, kovanlar ile torna, freze ve şekillendirme parçaları. Kendi üretimimizi uluslararası ticaret ağıyla birleştiriyoruz."},
+      {k:["tesekkur","teşekkür","sagol","sağol","harika","super","süper"],r:"Rica ederiz! 😊 Başka sorunuz varsa buradayım. Talebinizi bekliyoruz!"},
+      {k:["gorusuruz","görüşürüz","hosca","hoşça","bye"],r:"Görüşmek üzere! 👋 KI Global'e tekrar bekleriz."}
+    ]
+  },
+  en:{
+    greeting:"Hello! 👋 I'm the KI Global assistant. I can answer questions about our products, production and how to reach us. How can I help?",
+    fallback:"Sorry, I didn't quite get that. 🤔 I can help with products, quotes, production to drawing, delivery and contact – or simply use the contact form below.",
+    chips:["Products","Request a quote","Production to drawing","Contact"],
+    intents:[
+      {k:["hello","hi","hey","good morning","good day"],r:"Hello! 👋 Welcome. Ask me about our products, getting a quote, or our contact details."},
+      {k:["screw"],r:"🔩 We supply screws in all common dimensions: machine, sheet-metal and special screws, strength classes 8.8–12.9, to DIN/ISO, in steel, stainless and special materials. For a quote, just tell us standard, dimension and quantity!"},
+      {k:["bolt","pin"],r:"We manufacture and supply fitted, plug-in and threaded bolts – including custom parts to your drawing. Send us your requirements via the contact form!"},
+      {k:["washer","shim"],r:"We stock flat, spring and shim washers (e.g. DIN 125, DIN 9021) in steel, stainless steel and special materials – from stock or custom-made."},
+      {k:["sleeve","bushing","spacer"],r:"Spacer, threaded and clamping sleeves are part of our core range – precision-made, also to your drawing."},
+      {k:["turn","mill","cnc","machined"],r:"⚙️ Our CNC production manufactures turned and milled parts to your drawing – from prototype to large series, with documented quality control."},
+      {k:["cold form","hot form","forming","forged"],r:"We offer cold- and hot-formed parts: cold forming for economical high volumes with tight tolerances, hot forming for complex geometries and maximum strength."},
+      {k:["product","range","catalog","catalogue","what do you sell","what do you make"],r:"Our range includes:\n🔩 Screws & bolts\n⭕ Washers & sleeves\n⚙️ Turned & milled parts (CNC)\n🔧 Cold- & hot-formed parts\n\nAll to DIN/ISO or your drawing. What exactly are you looking for?"},
+      {k:["quote","price","cost","inquiry","order","buy","offer"],r:"We'd be happy to prepare a quote! 📋 Fastest via the contact form at the bottom of this page or by email to info@kiglobal.de. Helpful details: item/standard, dimensions, material and quantity."},
+      {k:["drawing","custom","special","sample","prototype"],r:"📐 Production to drawing is our strength! Send us your technical drawing (PDF/DXF/STEP) by email – we check feasibility and get back to you with a quote as soon as possible."},
+      {k:["quality","certificate","din","iso","standard","test"],r:"✅ Quality is systematic here: production and testing to DIN and ISO standards, calibrated inspection, mill certificates and batch traceability on request."},
+      {k:["deliver","shipping","transport","export","how long","lead time","logistics"],r:"🚚 We ship worldwide – stock items usually at short notice, custom parts depending on scope. Framework contracts with call-offs and Kanban delivery are also possible."},
+      {k:["contact","reach","phone","mail","address","call","location"],r:"📞 You can reach us:\nEmail: info@kiglobal.de\nPhone: +49 000 0000000\nMon–Fri: 8am–5pm\n\nOr simply use the contact form at the bottom of this page."},
+      {k:["company","about","who are you","history"],r:"KI Global is a producer and trader of fastening elements: screws, bolts, washers, sleeves as well as turned, milled and formed parts. We combine in-house production with an international trading network."},
+      {k:["thank","great","perfect","awesome"],r:"You're very welcome! 😊 I'm here if you have more questions. We look forward to your inquiry!"},
+      {k:["bye","goodbye","see you"],r:"Goodbye! 👋 See you soon at KI Global."}
+    ]
+  }
+};
+
+const chatFab = document.getElementById("chatFab");
+const chatBox = document.getElementById("chatBox");
+const chatLog = document.getElementById("chatLog");
+const chatInput = document.getElementById("chatInput");
+const chatSend = document.getElementById("chatSend");
+const chatChips = document.getElementById("chatChips");
+let greeted = false;
+
+chatFab.addEventListener("click", ()=>{
+  const open = chatBox.classList.toggle("open");
+  chatFab.classList.toggle("open", open);
+  if(open && !greeted){
+    greeted = true;
+    setTimeout(()=>botSay(BOT[lang].greeting), 350);
+  }
+  if(open) chatInput.focus();
+});
+
+function addMsg(text, who){
+  const div = document.createElement("div");
+  div.className = "msg " + who;
+  div.textContent = text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  return div;
+}
+
+function botSay(text){
+  const typing = document.createElement("div");
+  typing.className = "msg bot typing";
+  typing.innerHTML = "<i></i><i></i><i></i>";
+  chatLog.appendChild(typing);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  const delay = Math.min(400 + text.length * 6, 1400);
+  setTimeout(()=>{ typing.remove(); addMsg(text, "bot"); }, delay);
+}
+
+function normalize(s){
+  return s.toLowerCase()
+    .replaceAll("ä","a").replaceAll("ö","o").replaceAll("ü","u").replaceAll("ß","ss")
+    .replaceAll("ı","i").replaceAll("ş","s").replaceAll("ç","c").replaceAll("ğ","g");
+}
+
+function answer(input){
+  const q = normalize(input);
+  const data = BOT[lang];
+  let best = null, bestScore = 0;
+  for(const intent of data.intents){
+    let score = 0;
+    for(const kw of intent.k){
+      if(q.includes(normalize(kw))) score += kw.length;
+    }
+    if(score > bestScore){ bestScore = score; best = intent; }
+  }
+  return best ? best.r : data.fallback;
+}
+
+function send(text){
+  const t = (text ?? chatInput.value).trim();
+  if(!t) return;
+  addMsg(t, "user");
+  chatInput.value = "";
+  botSay(answer(t));
+}
+chatSend.addEventListener("click", ()=>send());
+chatInput.addEventListener("keydown", e=>{ if(e.key === "Enter") send(); });
+
+function renderChips(){
+  chatChips.innerHTML = "";
+  BOT[lang].chips.forEach(c=>{
+    const b = document.createElement("button");
+    b.textContent = c;
+    b.addEventListener("click", ()=>{
+      if(!chatBox.classList.contains("open")) chatFab.click();
+      send(c);
+    });
+    chatChips.appendChild(b);
+  });
+}
+
+/* Initial: gespeicherte Sprache anwenden */
+applyLang(lang);
+</script>
+</body>
+</html>
