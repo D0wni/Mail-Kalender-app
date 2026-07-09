@@ -1,0 +1,3 @@
+# Laufzeitdaten des Servers (wird beim Start automatisch angelegt)
+app.db
+__pycache__/
