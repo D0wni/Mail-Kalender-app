@@ -1,0 +1,4 @@
+# Datenbanken nicht mit hochladen (entstehen automatisch beim Start)
+app.db
+shop/shop.db
+__pycache__/

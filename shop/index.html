@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TechNova – Handys & Laptops</title>
+<meta name="description" content="TechNova – der schlichte Online-Shop für Handys und Laptops.">
+
+<style>
+  :root {
+    --bg:        #ffffff;
+    --bg-soft:   #f5f5f7;
+    --card:      #ffffff;
+    --border:    #e5e5ea;
+    --text:      #1d1d1f;
+    --muted:     #6e6e73;
+    --blue:      #0071e3;
+    --blue-dark: #0060c0;
+    --danger:    #ff3b30;
+    --success:   #34c759;
+    --radius:    18px;
+    --nav-h:     52px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 max(20px, calc((100% - 1024px) / 2));
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .nav-logo { font-size: 19px; font-weight: 700; letter-spacing: -0.5px; }
+  .nav-logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cart {
+    position: relative; background: none; border: none; padding: 6px;
+    display: flex; align-items: center; color: var(--text);
+  }
+  .nav-cart svg { width: 22px; height: 22px; }
+  .cart-badge {
+    position: absolute; top: 0; right: -2px;
+    min-width: 16px; height: 16px; border-radius: 8px;
+    background: var(--blue); color: #fff;
+    font-size: 10px; font-weight: 700; line-height: 16px; text-align: center;
+    padding: 0 4px; display: none;
+  }
+  .cart-badge.show { display: block; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100svh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: calc(var(--nav-h) + 40px) 24px 40px;
+    background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
+    overflow: hidden;
+  }
+  .hero-inner { transition: opacity 0.1s linear, transform 0.1s linear; }
+  .hero-kicker { color: var(--blue); font-weight: 600; font-size: 17px; margin: 0 0 8px; }
+  .hero h1 {
+    font-size: clamp(40px, 8vw, 76px); font-weight: 700;
+    letter-spacing: -2px; line-height: 1.05; margin: 0 0 12px;
+  }
+  .hero-tagline { font-size: clamp(19px, 3vw, 26px); color: var(--muted); margin: 0 0 24px; }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .btn {
+    border: none; border-radius: 980px; padding: 12px 26px;
+    font-size: 16px; font-weight: 500; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-ghost { background: none; color: var(--blue); border: 1px solid var(--blue); }
+  .btn-ghost:hover { background: var(--blue); color: #fff; }
+  .hero-img { width: min(340px, 62vw); margin: 0 auto; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.18)); }
+  .hero-scrollhint { margin-top: 28px; color: var(--muted); font-size: 13px; animation: bob 2.2s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+
+  /* ---------- Scroll-Story (Apple-Stil: Sektionen laufen ineinander) ---------- */
+  .story { height: 420svh; background: #000; position: relative; }
+  .story-sticky {
+    position: sticky; top: 0; height: 100svh; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .story-phone {
+    width: min(300px, 52vw);
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    filter: drop-shadow(0 24px 60px rgba(94,92,230,0.45));
+  }
+  .story-slide {
+    position: absolute; left: 0; right: 0; text-align: center; padding: 0 24px;
+    opacity: 0; transform: translateY(34px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    pointer-events: none;
+  }
+  .story-slide.top    { top: max(10svh, 76px); }
+  .story-slide.bottom { bottom: 9svh; }
+  .story-slide.active { opacity: 1; transform: translateY(0); }
+  .story-slide h2 {
+    color: #f5f5f7; font-size: clamp(28px, 5.5vw, 52px);
+    font-weight: 700; letter-spacing: -1.5px; margin: 0 0 8px;
+  }
+  .story-slide h2 em { font-style: normal; background: linear-gradient(90deg, #5e5ce6, #64d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .story-slide p { color: #a1a1a6; font-size: clamp(15px, 2.4vw, 20px); margin: 0 auto; max-width: 560px; }
+  .story-progress {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px;
+  }
+  .story-progress i { width: 7px; height: 7px; border-radius: 50%; background: #48484d; transition: background 0.3s; }
+  .story-progress i.on { background: #f5f5f7; }
+
+  /* ---------- Produkt-Sektionen ---------- */
+  .section { padding: 90px 24px; max-width: 1024px; margin: 0 auto; }
+  .section-title { font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -1px; margin: 0 0 6px; }
+  .section-sub { color: var(--muted); font-size: 18px; margin: 0 0 36px; }
+  .grid {
+    display: grid; gap: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .card {
+    background: var(--bg-soft); border-radius: var(--radius);
+    padding: 26px 22px 22px; text-align: center;
+    display: flex; flex-direction: column;
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+  .card.revealed { opacity: 1; transform: translateY(0); }
+  .card:hover { box-shadow: 0 14px 34px rgba(0,0,0,0.10); }
+  .card img { width: 78%; margin: 0 auto 14px; aspect-ratio: 1; object-fit: contain; }
+  .card h3 { margin: 0 0 4px; font-size: 20px; font-weight: 700; letter-spacing: -0.4px; }
+  .card .tagline { color: var(--muted); font-size: 14px; margin: 0 0 10px; min-height: 20px; }
+  .card .price { font-size: 17px; font-weight: 600; margin: 0 0 16px; }
+  .card .btn { margin-top: auto; align-self: center; padding: 9px 20px; font-size: 14px; }
+  .featured-pill {
+    display: inline-block; background: #5e5ce61a; color: #5e5ce6;
+    font-size: 12px; font-weight: 700; border-radius: 980px; padding: 3px 10px; margin-bottom: 8px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--bg-soft); border-top: 1px solid var(--border);
+    padding: 34px 24px; text-align: center; color: var(--muted); font-size: 13px;
+  }
+  footer b { color: var(--text); }
+
+  /* ---------- Overlays (Produkt-Detail, Warenkorb) ---------- */
+  .overlay {
+    position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    position: fixed; z-index: 210; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(0.96);
+    width: min(680px, calc(100% - 32px)); max-height: min(84svh, 760px);
+    background: var(--card); border-radius: 22px; overflow-y: auto;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+  }
+  .modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .modal-body { padding: 30px; }
+  .modal-close, .drawer-close {
+    position: absolute; top: 14px; right: 14px; z-index: 5;
+    width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: var(--bg-soft); color: var(--muted); font-size: 16px; line-height: 1;
+  }
+  .modal img.detail { width: min(280px, 60%); margin: 0 auto 18px; }
+  .modal h2 { margin: 0 0 4px; font-size: 28px; letter-spacing: -0.6px; text-align: center; }
+  .modal .tagline { text-align: center; color: var(--muted); margin: 0 0 8px; }
+  .modal .price { text-align: center; font-size: 22px; font-weight: 700; margin: 0 0 18px; }
+  .modal .desc { color: var(--muted); font-size: 15px; line-height: 1.55; margin-bottom: 20px; }
+  .specs { border-top: 1px solid var(--border); margin-bottom: 22px; }
+  .specs div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 2px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .specs div span:first-child { color: var(--muted); }
+  .specs div span:last-child { font-weight: 500; text-align: right; }
+  .modal .btn { display: block; width: 100%; }
+
+  /* ---------- Warenkorb-Drawer ---------- */
+  .drawer {
+    position: fixed; z-index: 210; top: 0; right: 0; bottom: 0;
+    width: min(420px, 100%); background: var(--card);
+    transform: translateX(105%); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.15);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head { padding: 20px 24px 14px; border-bottom: 1px solid var(--border); position: relative; }
+  .drawer-head h2 { margin: 0; font-size: 22px; }
+  .drawer-content { flex: 1; overflow-y: auto; padding: 18px 24px; }
+  .cart-item { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .cart-item img { width: 58px; height: 58px; object-fit: contain; background: var(--bg-soft); border-radius: 12px; padding: 6px; }
+  .cart-item .info { flex: 1; min-width: 0; }
+  .cart-item .info b { display: block; font-size: 15px; }
+  .cart-item .info span { color: var(--muted); font-size: 13px; }
+  .qty { display: flex; align-items: center; gap: 8px; }
+  .qty button {
+    width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--card); font-size: 15px; line-height: 1; color: var(--text);
+  }
+  .cart-remove { border: none; background: none; color: var(--danger); font-size: 13px; padding: 2px; }
+  .cart-total { display: flex; justify-content: space-between; font-size: 17px; font-weight: 700; padding: 16px 0 6px; }
+  .drawer-foot { padding: 16px 24px calc(20px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); }
+  .drawer-foot .btn { width: 100%; }
+  .empty-note { text-align: center; color: var(--muted); padding: 46px 10px; font-size: 15px; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .field input, .field textarea {
+    width: 100%; border: 1px solid var(--border); border-radius: 12px;
+    padding: 11px 13px; font: inherit; font-size: 15px; background: var(--bg-soft);
+    color: var(--text); outline: none;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--blue); background: #fff; }
+  .form-error { color: var(--danger); font-size: 14px; margin: 6px 0 0; min-height: 18px; }
+  .order-success { text-align: center; padding: 40px 10px; }
+  .order-success .check {
+    width: 66px; height: 66px; border-radius: 50%; background: var(--success);
+    color: #fff; font-size: 32px; line-height: 66px; margin: 0 auto 18px;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; z-index: 300; bottom: 90px; left: 50%;
+    transform: translate(-50%, 20px); opacity: 0;
+    background: var(--text); color: #fff; border-radius: 980px;
+    padding: 11px 22px; font-size: 14px; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Chatbot ---------- */
+  .chat-fab {
+    position: fixed; z-index: 190; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom));
+    width: 56px; height: 56px; border-radius: 50%; border: none;
+    background: var(--blue); color: #fff;
+    box-shadow: 0 10px 26px rgba(0,113,227,0.4);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+  }
+  .chat-fab:hover { transform: scale(1.07); }
+  .chat-fab svg { width: 26px; height: 26px; }
+  .chat-panel {
+    position: fixed; z-index: 195; right: 20px; bottom: calc(88px + env(safe-area-inset-bottom));
+    width: min(370px, calc(100vw - 40px)); height: min(500px, calc(100svh - 130px));
+    background: var(--card); border-radius: 20px; border: 1px solid var(--border);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; transform: translateY(16px) scale(0.98); pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .chat-panel.open { opacity: 1; transform: none; pointer-events: auto; }
+  .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .chat-head .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--success); }
+  .chat-head b { font-size: 15px; }
+  .chat-head span { color: var(--muted); font-size: 12px; }
+  .chat-msgs { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 9px; }
+  .msg { max-width: 82%; padding: 9px 13px; border-radius: 16px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; word-wrap: break-word; }
+  .msg.bot  { background: var(--bg-soft); color: var(--text); align-self: flex-start; border-bottom-left-radius: 5px; }
+  .msg.user { background: var(--blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+  .msg.typing { color: var(--muted); font-style: italic; }
+  .chat-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--border); }
+  .chat-input input {
+    flex: 1; border: 1px solid var(--border); border-radius: 980px;
+    padding: 9px 15px; font: inherit; font-size: 14px; outline: none; background: var(--bg-soft);
+  }
+  .chat-input input:focus { border-color: var(--blue); background: #fff; }
+  .chat-input button {
+    width: 38px; height: 38px; border-radius: 50%; border: none;
+    background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center;
+  }
+  .chat-input button:disabled { opacity: 0.45; }
+
+  /* ---------- Handy-Ansicht ---------- */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .section { padding: 64px 20px; }
+    .modal-body { padding: 24px 20px; }
+  }
+
+  /* ---------- Reduzierte Bewegung: alles ohne Animationen zeigen ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .card { opacity: 1; transform: none; transition: none; }
+    .hero-scrollhint { animation: none; }
+    .story { height: auto; padding: 70px 0; }
+    .story-sticky { position: static; height: auto; flex-direction: column; gap: 34px; padding: 20px; }
+    .story-slide { position: static; opacity: 1; transform: none; }
+    .story-progress { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a class="nav-logo" href="#top">Tech<span>Nova</span></a>
+  <div class="nav-links">
+    <a href="#highlight">Highlights</a>
+    <a href="#phones">Handys</a>
+    <a href="#laptops">Laptops</a>
+  </div>
+  <button class="nav-cart" id="cartBtn" aria-label="Warenkorb öffnen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 7h12l1.2 12.2a1.5 1.5 0 0 1-1.5 1.8H6.3a1.5 1.5 0 0 1-1.5-1.8L6 7z"/>
+      <path d="M9 10V6a3 3 0 0 1 6 0v4"/>
+    </svg>
+    <span class="cart-badge" id="cartBadge">0</span>
+  </button>
+</nav>
+
+<!-- Hero: das neueste Handy -->
+<header class="hero" id="top">
+  <div class="hero-inner" id="heroInner">
+    <p class="hero-kicker" id="heroKicker">Neu</p>
+    <h1 id="heroName">TechNova</h1>
+    <p class="hero-tagline" id="heroTagline">Handys &amp; Laptops. Schlicht gut.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" id="heroBuy">Kaufen</button>
+      <a class="btn btn-ghost" href="#highlight">Mehr erfahren</a>
+    </div>
+    <img class="hero-img" id="heroImg" alt="" src="">
+  </div>
+  <div class="hero-scrollhint">Scrollen zum Entdecken ↓</div>
+</header>
+
+<!-- Scroll-Story: Sektionen laufen beim Scrollen ineinander -->
+<section class="story" id="highlight">
+  <div class="story-sticky">
+    <img class="story-phone" id="storyPhone" alt="" src="">
+    <div class="story-slide top active" data-slide="0">
+      <h2 id="storyTitle0">Ein Sprung nach vorn.</h2>
+      <p id="storyText0"></p>
+    </div>
+    <div class="story-slide bottom" data-slide="1">
+      <h2><em id="storySpec1Key">Display</em></h2>
+      <p id="storySpec1Val"></p>
+    </div>
+    <div class="story-slide bottom" data-slide="2">
+      <h2><em id="storySpec2Key">Chip</em></h2>
+      <p id="storySpec2Val"></p>
+    </div>
+    <div class="story-slide bottom" data-slide="3">
+      <h2><em id="storySpec3Key">Kamera</em></h2>
+      <p id="storySpec3Val"></p>
+    </div>
+    <div class="story-slide bottom" data-slide="4">
+      <h2><em id="storySpec4Key">Akku</em></h2>
+      <p id="storySpec4Val"></p>
+    </div>
+    <div class="story-progress" id="storyProgress"></div>
+  </div>
+</section>
+
+<!-- Handys -->
+<section class="section" id="phones">
+  <h2 class="section-title">Handys</h2>
+  <p class="section-sub">Welches Nova passt zu dir?</p>
+  <div class="grid" id="phoneGrid"></div>
+</section>
+
+<!-- Laptops -->
+<section class="section" id="laptops" style="padding-top:20px">
+  <h2 class="section-title">Laptops</h2>
+  <p class="section-sub">Leistung, die dich weiterbringt.</p>
+  <div class="grid" id="laptopGrid"></div>
+</section>
+
+<footer>
+  <b>TechNova</b> – Demo-Shop · Kostenloser Versand innerhalb Deutschlands · 14 Tage Rückgaberecht<br>
+  Fragen? Unser Chat-Assistent unten rechts hilft dir gerne.
+</footer>
+
+<!-- Produkt-Detail -->
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="productModal" role="dialog" aria-modal="true">
+  <button class="modal-close" id="modalClose" aria-label="Schließen">✕</button>
+  <div class="modal-body" id="modalBody"></div>
+</div>
+
+<!-- Warenkorb -->
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Warenkorb</h2>
+    <button class="drawer-close" id="drawerClose" aria-label="Schließen">✕</button>
+  </div>
+  <div class="drawer-content" id="drawerContent"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Chatbot -->
+<button class="chat-fab" id="chatFab" aria-label="Chat öffnen">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.3 0-2.6-.3-3.7-.8L3 21l1.8-5.8A8.5 8.5 0 1 1 21 11.5z"/>
+  </svg>
+</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <span class="dot"></span>
+    <div><b>TechNova-Assistent</b><br><span>Antwortet sofort</span></div>
+  </div>
+  <div class="chat-msgs" id="chatMsgs"></div>
+  <form class="chat-input" id="chatForm">
+    <input id="chatInput" type="text" placeholder="Deine Frage…" autocomplete="off" maxlength="500">
+    <button type="submit" id="chatSend" aria-label="Senden">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<script>
+"use strict";
+
+/* ============================ Zustand ============================ */
+let PRODUCTS = [];
+let FEATURED = null;
+let cart = [];
+try { cart = JSON.parse(localStorage.getItem("technova_cart") || "[]"); } catch (e) { cart = []; }
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
+  (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function saveCart() { localStorage.setItem("technova_cart", JSON.stringify(cart)); updateBadge(); }
+function cartCount() { return cart.reduce((n, i) => n + i.quantity, 0); }
+function updateBadge() {
+  const b = $("cartBadge"), n = cartCount();
+  b.textContent = n;
+  b.classList.toggle("show", n > 0);
+}
+function showToast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* ============================ Produkte laden ============================ */
+async function loadProducts() {
+  try {
+    const res = await fetch("/api/products");
+    const data = await res.json();
+    PRODUCTS = data.products || [];
+  } catch (e) {
+    PRODUCTS = [];
+  }
+  FEATURED = PRODUCTS.find(p => p.is_featured && p.category === "phone")
+          || PRODUCTS.find(p => p.is_featured)
+          || PRODUCTS.find(p => p.category === "phone")
+          || PRODUCTS[0] || null;
+  renderHero();
+  renderStory();
+  renderGrids();
+}
+
+function renderHero() {
+  if (!FEATURED) return;
+  $("heroName").textContent = FEATURED.name;
+  $("heroTagline").textContent = FEATURED.tagline || FEATURED.description;
+  $("heroImg").src = FEATURED.image_url;
+  $("heroImg").alt = FEATURED.name;
+  $("heroBuy").onclick = () => openProduct(FEATURED.id);
+}
+
+function renderStory() {
+  if (!FEATURED) return;
+  $("storyPhone").src = FEATURED.image_url;
+  $("storyPhone").alt = FEATURED.name;
+  $("storyTitle0").textContent = FEATURED.name + ".";
+  $("storyText0").textContent = FEATURED.tagline || "";
+  const entries = Object.entries(FEATURED.specs || {});
+  for (let i = 1; i <= 4; i++) {
+    const e = entries[i - 1];
+    const slide = document.querySelector('.story-slide[data-slide="' + i + '"]');
+    if (!e) { if (slide) slide.remove(); continue; }
+    $("storySpec" + i + "Key").textContent = e[0];
+    $("storySpec" + i + "Val").textContent = e[1];
+  }
+  const dots = $("storyProgress");
+  dots.innerHTML = "";
+  document.querySelectorAll(".story-slide").forEach(() => dots.appendChild(document.createElement("i")));
+}
+
+function productCard(p) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML =
+    (p.is_featured ? '<span class="featured-pill">Neu</span>' : "") +
+    '<img loading="lazy" src="' + esc(p.image_url) + '" alt="' + esc(p.name) + '">' +
+    "<h3>" + esc(p.name) + "</h3>" +
+    '<p class="tagline">' + esc(p.tagline) + "</p>" +
+    '<p class="price">' + esc(p.price) + "</p>" +
+    '<button class="btn btn-primary">In den Warenkorb</button>';
+  card.querySelector("button").addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    addToCart(p.id);
+  });
+  card.addEventListener("click", () => openProduct(p.id));
+  return card;
+}
+
+function renderGrids() {
+  const phones = $("phoneGrid"), laptops = $("laptopGrid");
+  phones.innerHTML = ""; laptops.innerHTML = "";
+  PRODUCTS.forEach((p) => {
+    (p.category === "phone" ? phones : laptops).appendChild(productCard(p));
+  });
+  if (!PRODUCTS.length) {
+    phones.innerHTML = '<p class="empty-note">Produkte konnten nicht geladen werden. Läuft der Server?</p>';
+  }
+  observeCards();
+}
+
+/* ============ Einblend-Animation der Karten beim Scrollen ============ */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function observeCards() {
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    document.querySelectorAll(".card").forEach(c => c.classList.add("revealed"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en, idx) => {
+      if (en.isIntersecting) {
+        en.target.style.transitionDelay = (idx % 3) * 70 + "ms";
+        en.target.classList.add("revealed");
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".card").forEach(c => io.observe(c));
+}
+
+/* ========= Scroll-Story: Folien laufen beim Scrollen ineinander ========= */
+const storySection = document.querySelector(".story");
+function updateStory() {
+  if (reduceMotion) return;
+  const slides = document.querySelectorAll(".story-slide");
+  if (!slides.length) return;
+  const rect = storySection.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const total = rect.height - vh;
+  const progress = Math.min(1, Math.max(0, -rect.top / total));
+  const idx = Math.min(slides.length - 1, Math.floor(progress * slides.length));
+  slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+  document.querySelectorAll(".story-progress i").forEach((d, i) => d.classList.toggle("on", i === idx));
+  // Das Handy dreht und wächst leicht mit dem Scrollen -> Übergangs-Effekt
+  const phone = $("storyPhone");
+  const scale = 0.82 + progress * 0.3;
+  const rot = (progress - 0.5) * 14;
+  phone.style.transform = "scale(" + scale + ") rotate(" + rot + "deg)";
+}
+
+/* ================= Hero blendet beim Scrollen aus ================= */
+function updateHero() {
+  if (reduceMotion) return;
+  const y = window.scrollY;
+  const vh = window.innerHeight;
+  const f = Math.min(1, y / (vh * 0.7));
+  const inner = $("heroInner");
+  inner.style.opacity = String(1 - f * 0.9);
+  inner.style.transform = "translateY(" + (f * -34) + "px) scale(" + (1 - f * 0.05) + ")";
+}
+
+let ticking = false;
+window.addEventListener("scroll", () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { updateStory(); updateHero(); ticking = false; });
+}, { passive: true });
+
+/* ============================ Produkt-Detail ============================ */
+function openProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const specs = Object.entries(p.specs || {}).map(
+    ([k, v]) => "<div><span>" + esc(k) + "</span><span>" + esc(v) + "</span></div>"
+  ).join("");
+  $("modalBody").innerHTML =
+    '<img class="detail" src="' + esc(p.image_url) + '" alt="' + esc(p.name) + '">' +
+    "<h2>" + esc(p.name) + "</h2>" +
+    '<p class="tagline">' + esc(p.tagline) + "</p>" +
+    '<p class="price">' + esc(p.price) + "</p>" +
+    '<p class="desc">' + esc(p.description) + "</p>" +
+    (specs ? '<div class="specs">' + specs + "</div>" : "") +
+    '<button class="btn btn-primary" id="modalAdd">In den Warenkorb</button>';
+  $("modalAdd").onclick = () => { addToCart(p.id); closeModal(); };
+  $("overlay").classList.add("open");
+  $("productModal").classList.add("open");
+}
+function closeModal() {
+  $("productModal").classList.remove("open");
+  if (!$("drawer").classList.contains("open")) $("overlay").classList.remove("open");
+}
+$("modalClose").addEventListener("click", closeModal);
+
+/* ============================ Warenkorb ============================ */
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const existing = cart.find(i => i.product_id === id);
+  if (existing) existing.quantity = Math.min(99, existing.quantity + 1);
+  else cart.push({ product_id: id, quantity: 1 });
+  saveCart();
+  showToast(p.name + " wurde in den Warenkorb gelegt ✓");
+}
+
+let checkoutMode = false;
+function openDrawer() {
+  checkoutMode = false;
+  renderDrawer();
+  $("overlay").classList.add("open");
+  $("drawer").classList.add("open");
+}
+function closeDrawer() {
+  $("drawer").classList.remove("open");
+  if (!$("productModal").classList.contains("open")) $("overlay").classList.remove("open");
+}
+$("cartBtn").addEventListener("click", openDrawer);
+$("drawerClose").addEventListener("click", closeDrawer);
+$("overlay").addEventListener("click", () => { closeModal(); closeDrawer(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closeDrawer(); closeChat(); } });
+
+function cartTotalCents() {
+  return cart.reduce((sum, i) => {
+    const p = PRODUCTS.find(x => x.id === i.product_id);
+    return sum + (p ? p.price_cents * i.quantity : 0);
+  }, 0);
+}
+function formatPrice(cents) {
+  return (cents / 100).toFixed(2).replace(".", ",") + " €";
+}
+
+function renderDrawer() {
+  const content = $("drawerContent"), foot = $("drawerFoot");
+  $("drawerTitle").textContent = checkoutMode ? "Bestellung abschließen" : "Warenkorb";
+  cart = cart.filter(i => PRODUCTS.some(p => p.id === i.product_id));
+
+  if (!cart.length) {
+    content.innerHTML = '<p class="empty-note">Dein Warenkorb ist noch leer.<br>Stöbere durch unsere Handys und Laptops!</p>';
+    foot.innerHTML = "";
+    return;
+  }
+
+  if (!checkoutMode) {
+    content.innerHTML = cart.map((i) => {
+      const p = PRODUCTS.find(x => x.id === i.product_id);
+      return '<div class="cart-item">' +
+        '<img src="' + esc(p.image_url) + '" alt="">' +
+        '<div class="info"><b>' + esc(p.name) + "</b><span>" + esc(p.price) + "</span></div>" +
+        '<div class="qty">' +
+          '<button data-act="minus" data-id="' + p.id + '" aria-label="Weniger">−</button>' +
+          "<span>" + i.quantity + "</span>" +
+          '<button data-act="plus" data-id="' + p.id + '" aria-label="Mehr">+</button>' +
+        "</div>" +
+        '<button class="cart-remove" data-act="remove" data-id="' + p.id + '">Entfernen</button>' +
+      "</div>";
+    }).join("") +
+    '<div class="cart-total"><span>Gesamt</span><span>' + formatPrice(cartTotalCents()) + "</span></div>" +
+    '<p style="color:var(--muted);font-size:12px;margin:0">Kostenloser Versand · Zahlung auf Rechnung</p>';
+    foot.innerHTML = '<button class="btn btn-primary" id="toCheckout">Zur Kasse</button>';
+    $("toCheckout").onclick = () => { checkoutMode = true; renderDrawer(); };
+
+    content.querySelectorAll("button[data-act]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = parseInt(btn.dataset.id, 10);
+        const item = cart.find(i => i.product_id === id);
+        if (!item) return;
+        if (btn.dataset.act === "plus") item.quantity = Math.min(99, item.quantity + 1);
+        if (btn.dataset.act === "minus") item.quantity -= 1;
+        if (btn.dataset.act === "remove" || item.quantity <= 0) cart = cart.filter(i => i.product_id !== id);
+        saveCart(); renderDrawer();
+      });
+    });
+    return;
+  }
+
+  // Checkout-Formular
+  content.innerHTML =
+    '<div class="field"><label for="fName">Name</label><input id="fName" autocomplete="name" placeholder="Max Mustermann"></div>' +
+    '<div class="field"><label for="fEmail">E-Mail</label><input id="fEmail" type="email" autocomplete="email" placeholder="max@beispiel.de"></div>' +
+    '<div class="field"><label for="fAddress">Lieferadresse</label><textarea id="fAddress" rows="3" autocomplete="street-address" placeholder="Straße Hausnr.&#10;PLZ Ort"></textarea></div>' +
+    '<div class="field"><label for="fNote">Anmerkung (optional)</label><input id="fNote" placeholder="z.B. bitte klingeln"></div>' +
+    '<div class="cart-total"><span>Gesamt</span><span>' + formatPrice(cartTotalCents()) + "</span></div>" +
+    '<p style="color:var(--muted);font-size:12px;margin:0">Du bestellst auf Rechnung – wir melden uns per E-Mail mit den Zahlungsdetails.</p>' +
+    '<p class="form-error" id="formError"></p>';
+  foot.innerHTML =
+    '<button class="btn btn-primary" id="submitOrder">Jetzt bestellen</button>' +
+    '<button class="btn btn-ghost" id="backToCart" style="width:100%;margin-top:10px">Zurück zum Warenkorb</button>';
+  $("backToCart").onclick = () => { checkoutMode = false; renderDrawer(); };
+  $("submitOrder").onclick = submitOrder;
+}
+
+async function submitOrder() {
+  const err = $("formError");
+  err.textContent = "";
+  const body = {
+    customer_name: $("fName").value.trim(),
+    email: $("fEmail").value.trim(),
+    address: $("fAddress").value.trim(),
+    note: $("fNote").value.trim(),
+    items: cart,
+  };
+  if (!body.customer_name || !body.email || !body.address) {
+    err.textContent = "Bitte Name, E-Mail und Adresse ausfüllen.";
+    return;
+  }
+  $("submitOrder").disabled = true;
+  try {
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Bestellung fehlgeschlagen.");
+    cart = [];
+    saveCart();
+    $("drawerTitle").textContent = "Vielen Dank!";
+    $("drawerContent").innerHTML =
+      '<div class="order-success">' +
+        '<div class="check">✓</div>' +
+        "<h3>Bestellung Nr. " + data.order_id + " ist eingegangen!</h3>" +
+        '<p style="color:var(--muted)">Gesamtbetrag: <b>' + esc(data.total) + "</b><br>" +
+        "Wir melden uns in Kürze per E-Mail bei dir.</p>" +
+      "</div>";
+    $("drawerFoot").innerHTML = '<button class="btn btn-primary" id="doneBtn">Weiter stöbern</button>';
+    $("doneBtn").onclick = closeDrawer;
+  } catch (e) {
+    err.textContent = e.message;
+    $("submitOrder").disabled = false;
+  }
+}
+
+/* ============================ Chatbot ============================ */
+const chatHistory = [];
+function addMsg(role, text) {
+  const div = document.createElement("div");
+  div.className = "msg " + (role === "user" ? "user" : "bot");
+  div.textContent = text;
+  $("chatMsgs").appendChild(div);
+  $("chatMsgs").scrollTop = $("chatMsgs").scrollHeight;
+  return div;
+}
+function openChat() {
+  $("chatPanel").classList.add("open");
+  if (!chatHistory.length) {
+    addMsg("assistant", "Hallo! 👋 Ich bin der TechNova-Assistent. Frag mich z.B. nach unseren Handys, Preisen oder dem Versand.");
+    chatHistory.push({ role: "assistant", text: "Begrüßung" });
+  }
+  $("chatInput").focus();
+}
+function closeChat() { $("chatPanel").classList.remove("open"); }
+$("chatFab").addEventListener("click", () => {
+  $("chatPanel").classList.contains("open") ? closeChat() : openChat();
+});
+$("chatForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = $("chatInput");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  addMsg("user", text);
+  chatHistory.push({ role: "user", text });
+  $("chatSend").disabled = true;
+  const typing = addMsg("bot", "schreibt…");
+  typing.classList.add("typing");
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) }),
+    });
+    const data = await res.json();
+    typing.remove();
+    const answer = res.ok ? data.answer : (data.error || "Da ist etwas schiefgelaufen.");
+    addMsg("assistant", answer);
+    chatHistory.push({ role: "assistant", text: answer });
+  } catch (e2) {
+    typing.remove();
+    addMsg("assistant", "Ich kann den Server gerade nicht erreichen. Versuch es gleich noch einmal!");
+  }
+  $("chatSend").disabled = false;
+  input.focus();
+});
+
+/* ============================ Start ============================ */
+updateBadge();
+loadProducts();
+</script>
+</body>
+</html>

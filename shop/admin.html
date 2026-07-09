@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TechNova – Admin</title>
+<meta name="robots" content="noindex">
+
+<style>
+  :root {
+    --bg:      #f5f5f7;
+    --card:    #ffffff;
+    --border:  #e5e5ea;
+    --text:    #1d1d1f;
+    --muted:   #6e6e73;
+    --blue:    #0071e3;
+    --danger:  #ff3b30;
+    --success: #34c759;
+    --radius:  16px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; cursor: pointer; }
+  .hidden { display: none !important; }
+
+  .topbar {
+    background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+  }
+  .topbar b { font-size: 17px; }
+  .topbar b span { color: var(--blue); }
+  .topbar .muted { color: var(--muted); font-size: 13px; }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
+  }
+
+  /* ---- Login / Einrichtung ---- */
+  .auth-box { max-width: 380px; margin: 10vh auto 0; text-align: center; }
+  .auth-box h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.5px; }
+  .auth-box p { color: var(--muted); font-size: 14px; margin: 0 0 22px; }
+
+  .field { margin-bottom: 14px; text-align: left; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .field input, .field textarea, .field select {
+    width: 100%; border: 1px solid var(--border); border-radius: 12px;
+    padding: 11px 13px; font: inherit; font-size: 15px; background: var(--bg);
+    color: var(--text); outline: none;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--blue); background: #fff; }
+  .error { color: var(--danger); font-size: 14px; min-height: 18px; margin: 4px 0 8px; }
+
+  .btn {
+    border: none; border-radius: 980px; padding: 11px 22px;
+    font-size: 15px; font-weight: 500; transition: opacity 0.15s;
+  }
+  .btn:disabled { opacity: 0.5; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-ghost { background: none; color: var(--blue); border: 1px solid var(--blue); }
+  .btn-danger { background: none; color: var(--danger); border: 1px solid var(--danger); }
+  .btn-small { padding: 7px 14px; font-size: 13px; }
+
+  /* ---- Tabs ---- */
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab {
+    border: none; border-radius: 980px; padding: 9px 18px;
+    background: none; color: var(--muted); font-size: 15px; font-weight: 500; position: relative;
+  }
+  .tab.active { background: var(--text); color: #fff; }
+  .tab .badge {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 18px; height: 18px; border-radius: 9px; background: var(--danger);
+    color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; padding: 0 5px;
+  }
+
+  /* ---- Bestellungen ---- */
+  .order { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .order:last-child { border-bottom: none; }
+  .order-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .order-head b { font-size: 16px; }
+  .status {
+    font-size: 12px; font-weight: 700; border-radius: 980px; padding: 3px 11px;
+  }
+  .status.neu { background: #ff3b3018; color: var(--danger); }
+  .status.erledigt { background: #34c75920; color: #1e7e3e; }
+  .order .meta { color: var(--muted); font-size: 13px; margin: 5px 0; white-space: pre-line; }
+  .order ul { margin: 8px 0; padding-left: 20px; font-size: 14px; }
+  .order .total { font-weight: 700; font-size: 15px; }
+  .order-actions { margin-top: 8px; display: flex; gap: 8px; }
+
+  /* ---- Produkte ---- */
+  .prod-row {
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--border); padding: 12px 0;
+  }
+  .prod-row:last-child { border-bottom: none; }
+  .prod-row img { width: 52px; height: 52px; object-fit: contain; background: var(--bg); border-radius: 10px; }
+  .prod-row .info { flex: 1; min-width: 0; }
+  .prod-row .info b { font-size: 15px; }
+  .prod-row .info span { display: block; color: var(--muted); font-size: 13px; }
+  .pill {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    background: #5e5ce61a; color: #5e5ce6; border-radius: 980px; padding: 2px 8px; margin-left: 6px;
+  }
+  .prod-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+  .spec-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .spec-row input { flex: 1; }
+  .spec-row button {
+    border: 1px solid var(--border); background: var(--card); color: var(--danger);
+    border-radius: 10px; width: 40px;
+  }
+  .img-preview { width: 90px; height: 90px; object-fit: contain; background: var(--bg); border-radius: 12px; margin-top: 8px; display: none; }
+  .img-preview.show { display: block; }
+
+  .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 15px; }
+  .form-title { font-size: 19px; font-weight: 700; margin: 0 0 16px; }
+  .checkbox-line { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 14px; }
+  .checkbox-line input { width: 17px; height: 17px; }
+  .form-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .toast {
+    position: fixed; z-index: 300; bottom: 26px; left: 50%;
+    transform: translate(-50%, 20px); opacity: 0;
+    background: var(--text); color: #fff; border-radius: 980px;
+    padding: 11px 22px; font-size: 14px; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 560px) {
+    .prod-row { flex-wrap: wrap; }
+    .prod-actions { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <b>Tech<span>Nova</span> · Admin</b>
+  <div style="display:flex;gap:10px;align-items:center">
+    <a class="muted" href="/" style="color:var(--muted);text-decoration:none">Zum Shop ↗</a>
+    <button class="btn btn-ghost btn-small hidden" id="logoutBtn">Abmelden</button>
+  </div>
+</div>
+
+<!-- Ersteinrichtung -->
+<div class="auth-box hidden" id="setupView">
+  <div class="card">
+    <h1>Willkommen! 🎉</h1>
+    <p>Der Admin-Zugang wurde noch nicht eingerichtet.<br>
+       Lege jetzt <b>einmalig</b> dein Admin-Passwort fest (mindestens 8 Zeichen) und merke es dir gut.</p>
+    <div class="field">
+      <label for="setupPw">Neues Admin-Passwort</label>
+      <input id="setupPw" type="password" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label for="setupPw2">Passwort wiederholen</label>
+      <input id="setupPw2" type="password" autocomplete="new-password">
+    </div>
+    <p class="error" id="setupError"></p>
+    <button class="btn btn-primary" id="setupBtn" style="width:100%">Admin-Zugang einrichten</button>
+  </div>
+</div>
+
+<!-- Login -->
+<div class="auth-box hidden" id="loginView">
+  <div class="card">
+    <h1>Admin-Login</h1>
+    <p>Bitte melde dich mit deinem Admin-Passwort an.</p>
+    <div class="field">
+      <label for="loginPw">Passwort</label>
+      <input id="loginPw" type="password" autocomplete="current-password">
+    </div>
+    <p class="error" id="loginError"></p>
+    <button class="btn btn-primary" id="loginBtn" style="width:100%">Anmelden</button>
+  </div>
+</div>
+
+<!-- Admin-Oberfläche -->
+<div class="wrap hidden" id="adminView">
+  <div class="tabs">
+    <button class="tab active" id="tabOrders">Bestellungen<span class="badge hidden" id="newBadge"></span></button>
+    <button class="tab" id="tabProducts">Produkte</button>
+  </div>
+
+  <!-- Bestellungen -->
+  <div id="ordersPanel">
+    <div class="card" id="ordersList"><p class="empty">Lade Bestellungen…</p></div>
+  </div>
+
+  <!-- Produkte -->
+  <div id="productsPanel" class="hidden">
+    <div class="card">
+      <h2 class="form-title" id="prodFormTitle">Neues Produkt einstellen</h2>
+      <div class="field">
+        <label for="pName">Name</label>
+        <input id="pName" placeholder="z.B. Nova Y Ultra">
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div class="field" style="flex:1;min-width:140px">
+          <label for="pCategory">Kategorie</label>
+          <select id="pCategory">
+            <option value="phone">Handy</option>
+            <option value="laptop">Laptop</option>
+          </select>
+        </div>
+        <div class="field" style="flex:1;min-width:140px">
+          <label for="pPrice">Preis in Euro</label>
+          <input id="pPrice" inputmode="decimal" placeholder="z.B. 999,99">
+        </div>
+      </div>
+      <div class="field">
+        <label for="pTagline">Kurzer Slogan</label>
+        <input id="pTagline" placeholder="z.B. Das Beste kommt zum Schluss.">
+      </div>
+      <div class="field">
+        <label for="pDesc">Beschreibung</label>
+        <textarea id="pDesc" rows="3" placeholder="Was macht das Produkt besonders?"></textarea>
+      </div>
+      <div class="field">
+        <label>Technische Daten</label>
+        <div id="specRows"></div>
+        <button class="btn btn-ghost btn-small" id="addSpecBtn" type="button">+ Zeile hinzufügen</button>
+      </div>
+      <div class="field">
+        <label for="pImage">Produktbild (optional – JPG/PNG, max. 4 MB)</label>
+        <input id="pImage" type="file" accept="image/*">
+        <img class="img-preview" id="imgPreview" alt="">
+      </div>
+      <div class="checkbox-line">
+        <input type="checkbox" id="pFeatured">
+        <label for="pFeatured" style="margin:0">Als „Neuestes Produkt“ groß auf der Startseite zeigen</label>
+      </div>
+      <p class="error" id="prodError"></p>
+      <div class="form-buttons">
+        <button class="btn btn-primary" id="saveProdBtn">Produkt speichern</button>
+        <button class="btn btn-ghost hidden" id="cancelEditBtn">Bearbeiten abbrechen</button>
+      </div>
+    </div>
+    <div class="card" id="productsList"><p class="empty">Lade Produkte…</p></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
+  (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function showToast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+async function api(path, method = "GET", body = null) {
+  const opts = { method, headers: {} };
+  if (body !== null) {
+    opts.headers["Content-Type"] = "application/json";
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(path, opts);
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw new Error(data.error || "Fehler " + res.status);
+  return data;
+}
+
+/* ---------------- Ansichten umschalten ---------------- */
+function show(view) {
+  ["setupView", "loginView", "adminView"].forEach(v => $(v).classList.add("hidden"));
+  $(view).classList.remove("hidden");
+  $("logoutBtn").classList.toggle("hidden", view !== "adminView");
+}
+
+async function checkStatus() {
+  try {
+    const s = await api("/api/admin/status");
+    if (!s.setup_done) show("setupView");
+    else if (!s.logged_in) show("loginView");
+    else { show("adminView"); loadOrders(); loadProducts(); }
+  } catch (e) {
+    show("loginView");
+    $("loginError").textContent = "Server nicht erreichbar.";
+  }
+}
+
+/* ---------------- Einrichtung & Login ---------------- */
+$("setupBtn").addEventListener("click", async () => {
+  const pw = $("setupPw").value, pw2 = $("setupPw2").value;
+  $("setupError").textContent = "";
+  if (pw.length < 8) { $("setupError").textContent = "Mindestens 8 Zeichen, bitte."; return; }
+  if (pw !== pw2) { $("setupError").textContent = "Die Passwörter stimmen nicht überein."; return; }
+  $("setupBtn").disabled = true;
+  try {
+    await api("/api/admin/setup", "POST", { password: pw });
+    showToast("Admin-Zugang eingerichtet ✓");
+    show("adminView"); loadOrders(); loadProducts();
+  } catch (e) {
+    $("setupError").textContent = e.message;
+  }
+  $("setupBtn").disabled = false;
+});
+
+$("loginBtn").addEventListener("click", doLogin);
+$("loginPw").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+async function doLogin() {
+  $("loginError").textContent = "";
+  $("loginBtn").disabled = true;
+  try {
+    await api("/api/admin/login", "POST", { password: $("loginPw").value });
+    $("loginPw").value = "";
+    show("adminView"); loadOrders(); loadProducts();
+  } catch (e) {
+    $("loginError").textContent = e.message;
+  }
+  $("loginBtn").disabled = false;
+}
+
+$("logoutBtn").addEventListener("click", async () => {
+  try { await api("/api/admin/logout", "POST", {}); } catch (e) {}
+  show("loginView");
+});
+
+/* ---------------- Tabs ---------------- */
+$("tabOrders").addEventListener("click", () => switchTab("orders"));
+$("tabProducts").addEventListener("click", () => switchTab("products"));
+function switchTab(which) {
+  $("tabOrders").classList.toggle("active", which === "orders");
+  $("tabProducts").classList.toggle("active", which === "products");
+  $("ordersPanel").classList.toggle("hidden", which !== "orders");
+  $("productsPanel").classList.toggle("hidden", which !== "products");
+}
+
+/* ---------------- Bestellungen ---------------- */
+async function loadOrders() {
+  const box = $("ordersList");
+  try {
+    const data = await api("/api/admin/orders");
+    const orders = data.orders || [];
+    const newCount = orders.filter(o => o.status === "neu").length;
+    $("newBadge").textContent = newCount;
+    $("newBadge").classList.toggle("hidden", newCount === 0);
+    if (!orders.length) {
+      box.innerHTML = '<p class="empty">Noch keine Bestellungen. Sobald jemand im Shop bestellt, erscheint die Bestellung hier.</p>';
+      return;
+    }
+    box.innerHTML = orders.map((o) => {
+      const date = new Date(o.created_at).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" });
+      const items = o.items.map(i => "<li>" + i.quantity + "× " + esc(i.name) + " (" + esc(i.price) + ")</li>").join("");
+      return '<div class="order">' +
+        '<div class="order-head"><b>Bestellung #' + o.id + "</b>" +
+        '<span class="status ' + esc(o.status) + '">' + (o.status === "neu" ? "Neu" : "Erledigt") + "</span></div>" +
+        '<p class="meta">' + esc(date) + " · " + esc(o.customer_name) + " · " + esc(o.email) +
+        "\n" + esc(o.address) + (o.note ? "\nAnmerkung: " + esc(o.note) : "") + "</p>" +
+        "<ul>" + items + "</ul>" +
+        '<p class="total">Gesamt: ' + esc(o.total) + "</p>" +
+        '<div class="order-actions">' +
+        (o.status === "neu"
+          ? '<button class="btn btn-primary btn-small" data-done="' + o.id + '">Als erledigt markieren</button>'
+          : '<button class="btn btn-ghost btn-small" data-reopen="' + o.id + '">Wieder auf „Neu“ setzen</button>') +
+        "</div></div>";
+    }).join("");
+    box.querySelectorAll("[data-done]").forEach(b => b.addEventListener("click", () => setOrderStatus(b.dataset.done, "erledigt")));
+    box.querySelectorAll("[data-reopen]").forEach(b => b.addEventListener("click", () => setOrderStatus(b.dataset.reopen, "neu")));
+  } catch (e) {
+    box.innerHTML = '<p class="empty">' + esc(e.message) + "</p>";
+  }
+}
+async function setOrderStatus(id, status) {
+  try {
+    await api("/api/admin/orders/" + id, "PUT", { status });
+    showToast("Bestellung aktualisiert ✓");
+    loadOrders();
+  } catch (e) { showToast(e.message); }
+}
+
+/* ---------------- Produkte ---------------- */
+let editingId = null;
+let uploadedImage = "";
+
+function specRow(key = "", val = "") {
+  const div = document.createElement("div");
+  div.className = "spec-row";
+  div.innerHTML =
+    '<input class="spec-key" placeholder="z.B. Display" value="' + esc(key) + '">' +
+    '<input class="spec-val" placeholder="z.B. 6,7&quot; OLED" value="' + esc(val) + '">' +
+    '<button type="button" aria-label="Zeile entfernen">✕</button>';
+  div.querySelector("button").addEventListener("click", () => div.remove());
+  return div;
+}
+$("addSpecBtn").addEventListener("click", () => $("specRows").appendChild(specRow()));
+
+$("pImage").addEventListener("change", () => {
+  const file = $("pImage").files[0];
+  uploadedImage = "";
+  $("imgPreview").classList.remove("show");
+  if (!file) return;
+  if (file.size > 4 * 1024 * 1024) {
+    $("prodError").textContent = "Das Bild ist zu groß (max. 4 MB).";
+    $("pImage").value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    uploadedImage = reader.result;
+    $("imgPreview").src = uploadedImage;
+    $("imgPreview").classList.add("show");
+    $("prodError").textContent = "";
+  };
+  reader.readAsDataURL(file);
+});
+
+function resetProductForm() {
+  editingId = null;
+  uploadedImage = "";
+  $("prodFormTitle").textContent = "Neues Produkt einstellen";
+  $("saveProdBtn").textContent = "Produkt speichern";
+  $("cancelEditBtn").classList.add("hidden");
+  ["pName", "pPrice", "pTagline", "pDesc"].forEach(id => $(id).value = "");
+  $("pCategory").value = "phone";
+  $("pFeatured").checked = false;
+  $("pImage").value = "";
+  $("imgPreview").classList.remove("show");
+  $("prodError").textContent = "";
+  $("specRows").innerHTML = "";
+  ["Display", "Chip", "Kamera", "Akku"].forEach(k => $("specRows").appendChild(specRow(k, "")));
+}
+$("cancelEditBtn").addEventListener("click", resetProductForm);
+
+function collectSpecs() {
+  const specs = {};
+  document.querySelectorAll("#specRows .spec-row").forEach((row) => {
+    const k = row.querySelector(".spec-key").value.trim();
+    const v = row.querySelector(".spec-val").value.trim();
+    if (k && v) specs[k] = v;
+  });
+  return specs;
+}
+
+$("saveProdBtn").addEventListener("click", async () => {
+  $("prodError").textContent = "";
+  $("saveProdBtn").disabled = true;
+  const body = {
+    name: $("pName").value.trim(),
+    category: $("pCategory").value,
+    price: $("pPrice").value.trim(),
+    tagline: $("pTagline").value.trim(),
+    description: $("pDesc").value.trim(),
+    specs: collectSpecs(),
+    image: uploadedImage,
+    is_featured: $("pFeatured").checked,
+  };
+  try {
+    if (editingId) {
+      await api("/api/admin/products/" + editingId, "PUT", body);
+      showToast("Produkt aktualisiert ✓");
+    } else {
+      await api("/api/admin/products", "POST", body);
+      showToast("Produkt eingestellt ✓");
+    }
+    resetProductForm();
+    loadProducts();
+  } catch (e) {
+    $("prodError").textContent = e.message;
+  }
+  $("saveProdBtn").disabled = false;
+});
+
+let PRODUCTS = [];
+async function loadProducts() {
+  const box = $("productsList");
+  try {
+    const data = await api("/api/products");
+    PRODUCTS = data.products || [];
+    if (!PRODUCTS.length) {
+      box.innerHTML = '<p class="empty">Noch keine Produkte. Stelle oben dein erstes Produkt ein!</p>';
+      return;
+    }
+    box.innerHTML = PRODUCTS.map((p) =>
+      '<div class="prod-row">' +
+        '<img src="' + esc(p.image_url) + '?t=' + Date.now() + '" alt="">' +
+        '<div class="info"><b>' + esc(p.name) + "</b>" +
+        (p.is_featured ? '<span class="pill">Startseite</span>' : "") +
+        "<span>" + (p.category === "phone" ? "Handy" : "Laptop") + " · " + esc(p.price) + "</span></div>" +
+        '<div class="prod-actions">' +
+          '<button class="btn btn-ghost btn-small" data-edit="' + p.id + '">Bearbeiten</button>' +
+          '<button class="btn btn-danger btn-small" data-del="' + p.id + '">Löschen</button>' +
+        "</div>" +
+      "</div>"
+    ).join("");
+    box.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => startEdit(parseInt(b.dataset.edit, 10))));
+    box.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => deleteProduct(parseInt(b.dataset.del, 10))));
+  } catch (e) {
+    box.innerHTML = '<p class="empty">' + esc(e.message) + "</p>";
+  }
+}
+
+function startEdit(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  uploadedImage = "";
+  $("prodFormTitle").textContent = "Produkt bearbeiten: " + p.name;
+  $("saveProdBtn").textContent = "Änderungen speichern";
+  $("cancelEditBtn").classList.remove("hidden");
+  $("pName").value = p.name;
+  $("pCategory").value = p.category;
+  $("pPrice").value = (p.price_cents / 100).toFixed(2).replace(".", ",");
+  $("pTagline").value = p.tagline || "";
+  $("pDesc").value = p.description || "";
+  $("pFeatured").checked = !!p.is_featured;
+  $("pImage").value = "";
+  $("imgPreview").src = p.image_url;
+  $("imgPreview").classList.add("show");
+  $("specRows").innerHTML = "";
+  Object.entries(p.specs || {}).forEach(([k, v]) => $("specRows").appendChild(specRow(k, v)));
+  if (!Object.keys(p.specs || {}).length) $("specRows").appendChild(specRow());
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  if (!confirm('"' + p.name + '" wirklich löschen? Das kann nicht rückgängig gemacht werden.')) return;
+  try {
+    await api("/api/admin/products/" + id, "DELETE");
+    showToast("Produkt gelöscht");
+    if (editingId === id) resetProductForm();
+    loadProducts();
+  } catch (e) { showToast(e.message); }
+}
+
+/* ---------------- Start ---------------- */
+resetProductForm();
+checkStatus();
+// Bestellungen alle 60 Sekunden automatisch aktualisieren
+setInterval(() => {
+  if (!$("adminView").classList.contains("hidden")) loadOrders();
+}, 60000);
+</script>
+</body>
+</html>
